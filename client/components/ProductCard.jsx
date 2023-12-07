@@ -1,12 +1,14 @@
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 
-const ProductTile = (props) => {
+const ProductCard = (props) => {
     const imgPath = 'http://127.0.0.1:5000/' + props.product.img
 
     return (
         <Pressable
             style={styles.productBox}
-            onPress={() => props.navigation.navigate('ScreenB')}
+            onPress={() => props.navigation.navigate('Product', {
+                productId: props.product.id
+            })}
         >
             <Image style={styles.imgBox} source={imgPath} />
             <View style={styles.infoBox}>
@@ -35,4 +37,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ProductTile;
+export default ProductCard;

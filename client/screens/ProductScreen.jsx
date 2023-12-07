@@ -1,9 +1,12 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
+import ProductItem from '../components/ProductItem';
 
-export default function ProductScreen() {
+export default function ProductScreen({ route }) {
+  const { productId } = route.params
+
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Product Screen</Text>
+    <View>
+      <ProductItem productId={productId} />
     </View>
   )
 }

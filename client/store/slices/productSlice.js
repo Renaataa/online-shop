@@ -1,16 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const defaultState = {
-    products: []
+    product: []
 }
     
-export const loadProducts = createAsyncThunk('products/loadProducts', async () => {
-    const resp = await fetch('http://127.0.0.1:5000/api/device')
+export const loadProduct = createAsyncThunk('product/loadProduct', async (productId) => {
+    const resp = await fetch(`http://127.0.0.1:5000/api/device/${productId}`)
     return await resp.json()
 })
 
-const productsSlice = createSlice({
-    name: 'products',
+const productSlice = createSlice({
+    name: 'product',
     initialState: defaultState,
     reducers: {
         //reducer
@@ -18,9 +18,9 @@ const productsSlice = createSlice({
     extraReducers: (build) => {
         build
             // addCase - То, что возвращается - является, новым состоянием 
-            .addCase(loadProducts.fulfilled, (state, action) => {
-                //console.log(action.payload.rows, 'data')
-                state.products = action.payload.rows
+            .addCase(loadProduct.fulfilled, (state, action) => {
+                //console.log(action.payload, 'oneDevice')
+                state.product = action.payload
 
                 // Пересоздавала память. 
                 //state = action.payload.rows 
@@ -43,6 +43,6 @@ const productsSlice = createSlice({
     }
 })
 
-export const { } = productsSlice.actions
-export const productsReducer = productsSlice.reducer
+export const { } = productSlice.actions
+export const productReducer = productSlice.reducer
 

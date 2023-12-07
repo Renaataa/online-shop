@@ -1,8 +1,8 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { View, StyleSheet } from 'react-native'; 
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { loadProducts } from '../store/slices/productsSlice';
-import ProductTile from '../components/ProductTile';
+import ProductCard from '../components/ProductCard';
 
 const ListProducts = (props) => {
     const dispatch = useDispatch()
@@ -12,13 +12,13 @@ const ListProducts = (props) => {
     }, [])
     
     const listProducts = useSelector((store)=>store.productsReducer.products)
-    console.log(listProducts)   
+    //console.log(listProducts)   
 
     return (
         <View style={styles.container}>
             {
                 listProducts.map((product) => {
-                    return <ProductTile key={product.id} product={product} navigation={props.navigation} />
+                    return <ProductCard key={product.id} product={product} navigation={props.navigation} />
                 })
             }
         </View>
