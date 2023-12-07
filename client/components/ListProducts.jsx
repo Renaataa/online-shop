@@ -1,11 +1,18 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 import { View, StyleSheet } from 'react-native'; 
+import { useEffect } from 'react';
+import { loadProducts } from '../store/slices/productsSlice';
 import ProductTile from '../components/ProductTile';
 
 const ListProducts = (props) => {
+    const dispatch = useDispatch()
 
-    const listProducts = useSelector((store)=>store.productsReducer)
-    console.log(listProducts)
+    useEffect(() => {
+        dispatch(loadProducts()) 
+    }, [])
+    
+    const listProducts = useSelector((store)=>store.productsReducer.products)
+    console.log(listProducts)   
 
     return (
         <View style={styles.container}>
