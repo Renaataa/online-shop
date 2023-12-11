@@ -11,8 +11,7 @@ const ListProducts = (props) => {
         dispatch(loadProducts()) 
     }, [])
     
-    const listProducts = useSelector((store)=>store.productsReducer.products)
-    //console.log(listProducts)   
+    const listProducts = useSelector((store)=>store.productsReducer.products) 
 
     return (
         <View style={styles.container}>

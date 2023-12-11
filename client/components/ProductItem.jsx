@@ -1,43 +1,92 @@
-import { View, StyleSheet } from "react-native";
-import { useEffect } from "react";
+import { View, StyleSheet, Image, Text, Pressable } from "react-native";
+import { useEffect, useState } from "react";
+
 import { useDispatch, useSelector } from 'react-redux';
 import { loadProduct } from '../store/slices/productSlice';
 
-const ProductItem = (props) => {
-    const dispatch = useDispatch()
+import ModalAddToCart from "./ModalAddToCart";
+import ListProductInfo from "./ListProductInfo";
+
+function ProductItem (props) {
+    const dispatch = useDispatch()    
+    const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
         dispatch(loadProduct(props.productId)) 
     }, [])
     
-    const product = useSelector((store)=>store.productReducer.product)
-    //console.log(product)
-    
+    const product = useSelector((store) => store.productReducer.product) 
     const imgPath = 'http://127.0.0.1:5000/' + product.img
 
+    const buy = () => console.log(`You ordered ${product.name} for ${product.price} zl`)
+
     return (
-        <View style={styles.productBox}>
-            <View>
-                <Image style={styles.imgBox} source={imgPath} />
+        <View>
+            <View style={{flexDirection: 'row'}}>
+                <View>
+                    <Image source={{uri: imgPath}} style={styles.img} />  
+                </View>
+                <View style={styles.productInfo}>
+                    <Text style={{ fontSize: 27, fontWeight: 'bold' }}>{product.name}</Text>
+                    {
+                        product.info ?
+                            <ListProductInfo info={product.info} />
+                        :
+                            ''
+                    }
+                    <Text style={{ fontSize: 20, fontWeight: 650 }}>{product.price} zl</Text>
+                </View>
             </View>
-            <View>
-                
-            </View>
+
+            <Pressable
+                style={{ ...styles.btn, backgroundColor: "#F7E18A" }}
+                onPress={() => setShowModal(true)}
+            >
+                <Text style={styles.btnTxt}>Add to cart</Text>
+            </Pressable>
+            <Pressable
+                style={styles.btn}
+                onPress={buy}
+            >
+                <Text style={styles.btnTxt}>Buy</Text>
+            </Pressable>
+
+            {/* ????????????? */}
+            {
+                showModal ?
+                    <ModalAddToCart
+                        product={product}
+                        changeShowModal={(value) => setShowModal(value)}
+                    />
+                :
+                    ''
+            }
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    productBox: {
-        flexDirection: 'row',
-    },
-    infoBox: {
+    productInfo: {
         justifyContent: 'space-between',
         paddingHorizontal: 10
     },
-    imgBox: {
-        width: '30%',
-        height: '100px'
+    img: {
+        width: 250,
+        height: 350
+    },
+    btn: {
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 25,
+        width: '95%',
+        height: 40,
+        backgroundColor: '#F99A6B',
+        borderRadius: 20
+    },
+    btnTxt: {
+        fontWeight: 'bold',
+        textAlign: 'center',
     }
 })
 

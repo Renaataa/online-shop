@@ -2,7 +2,7 @@ import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 
 const ProductCard = (props) => {
     const imgPath = 'http://127.0.0.1:5000/' + props.product.img
-
+    
     return (
         <Pressable
             style={styles.productBox}
@@ -10,7 +10,7 @@ const ProductCard = (props) => {
                 productId: props.product.id
             })}
         >
-            <Image style={styles.imgBox} source={imgPath} />
+            <Image style={styles.img} source={imgPath} />
             <View style={styles.infoBox}>
                 <Text style={{fontSize: 20, fontWeight: 'bold'}}>{props.product.name}</Text>
                 <Text style={{fontSize: 15, fontWeight: 649}}>{props.product.price} zl</Text>
@@ -31,9 +31,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 10
     },
-    imgBox: {
+    img: {
         width: '30%',
-        height: '100px'
+        height: '125px'
     }
 })
 
