@@ -4,8 +4,9 @@ const defaultState = {
     products: []
 }
     
-export const loadProducts = createAsyncThunk('products/loadProducts', async () => {
-    const resp = await fetch('http://127.0.0.1:5000/api/device')
+export const loadProducts = createAsyncThunk('products/loadProducts', async (requestSettings) => {
+   
+    const resp = await fetch(`http://127.0.0.1:5000/api/device?page=${requestSettings.page}&limit=${requestSettings.limit}`)
     return await resp.json()
 })
 

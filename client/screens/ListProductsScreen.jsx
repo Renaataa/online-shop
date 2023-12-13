@@ -1,7 +1,10 @@
+import { View } from 'react-native';
 import ListProducts from '../components/ListProducts';
 
-export default function ListProductsScreen({ navigation }) {  
+export default function ListProductsScreen({ navigation }) {    
   return (
-    <ListProducts navigation={navigation} />
+    <View>     
+      <ListProducts navigation={navigation} />
+    </View>
   )
 }
