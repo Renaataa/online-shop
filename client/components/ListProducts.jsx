@@ -8,6 +8,7 @@ import ProductCard from '../components/ProductCard';
 
 const ListProducts = (props) => {
     const dispatch = useDispatch()
+    
     const [isLoading, setIsLoading] = useState(true)
     const [requestSettings, setrequestSettings] = useState({
         page: 1,
