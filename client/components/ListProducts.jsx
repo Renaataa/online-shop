@@ -4,25 +4,34 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadProducts } from '../store/slices/productsSlice';
+import { loadBrand } from '../store/slices/brandSlice';
+import { loadType } from '../store/slices/typeSlice';
 import ProductCard from '../components/ProductCard';
+import Filter from '../components/Filter';
 
 const ListProducts = (props) => {
     const dispatch = useDispatch()
     
     const [isLoading, setIsLoading] = useState(true)
-    const [requestSettings, setrequestSettings] = useState({
+    const [requestSettings, setRequestSettings] = useState({
         page: 1,
-        limit: 4
+        limit: 2,
+        typeId: '',
+        brandId: ''
     })
 
     useEffect(() => {
-        dispatch(loadProducts(requestSettings)) 
+        dispatch(loadProducts(requestSettings))
+        dispatch(loadBrand()) 
+        dispatch(loadType()) 
     }, [requestSettings])
     
     let listProducts = useSelector((store) => store.productsReducer.products) 
-        
+    let listBrands = useSelector((store) => store.brandReducer.brands)
+    let listTypes = useSelector((store) => store.typeReducer.types) 
+    
     async function update() {
-        console.log("here") // ??????????????????????????
+        //console.log("here") // ??????????????????????????
         setIsLoading(true)
         listProducts = await useSelector((store) => store.productsReducer.products)
         setIsLoading(false)
@@ -30,13 +39,29 @@ const ListProducts = (props) => {
 
     return (
         <View style={styles.container}>
+            <Filter
+                listAllDetails={listBrands}
+                filterName={'Brands'}
+                filter={(listBrandsId) => {
+                    const strBrandsId = listBrandsId.reduce((accumulator, id) => accumulator + `brandId=${id}&`, '&')
+                    setRequestSettings({ ...requestSettings, brandId: strBrandsId })
+                }}
+            />
+            <Filter
+                listAllDetails={listTypes}
+                filterName={'Types'}
+                filter={(listTypesId) => {
+                    const strTypesId = listTypesId.reduce((accumulator, id) => accumulator + `typeId=${id}&`, '&')
+                    setRequestSettings({ ...requestSettings, typeId: strTypesId })
+                }}
+            />
             <GestureHandlerRootView>
                 <Swipeable
                     onSwipeableWillClose={(value) => {
                         switch (value) {
                             case 'left':
                                 requestSettings.page > 1 ?
-                                    setrequestSettings({ ...requestSettings, page: requestSettings.page - 1 })
+                                    setRequestSettings({ ...requestSettings, page: requestSettings.page - 1 })
                                 :
                                     ''
                                 break
@@ -44,7 +69,7 @@ const ListProducts = (props) => {
                                 listProducts.length < requestSettings.limit ?
                                     ''
                                 :
-                                    setrequestSettings({ ...requestSettings, page: requestSettings.page + 1 })
+                                    setRequestSettings({ ...requestSettings, page: requestSettings.page + 1 })
                                 break
                         }
                     }}

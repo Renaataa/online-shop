@@ -5,8 +5,8 @@ const defaultState = {
 }
     
 export const loadProducts = createAsyncThunk('products/loadProducts', async (requestSettings) => {
-   
-    const resp = await fetch(`http://127.0.0.1:5000/api/device?page=${requestSettings.page}&limit=${requestSettings.limit}`)
+    console.log(requestSettings)
+    const resp = await fetch(`http://127.0.0.1:5000/api/device?page=${requestSettings.page}&limit=${requestSettings.limit}${requestSettings.brandId}${requestSettings.typeId}`)
     return await resp.json()
 })
 
