@@ -11,30 +11,34 @@ import Filter from '../components/Filter';
 
 const ListProducts = (props) => {
     const dispatch = useDispatch()
-    
+
     const [isLoading, setIsLoading] = useState(true)
     const [requestSettings, setRequestSettings] = useState({
         page: 1,
-        limit: 2,
+        limit: 4,
         typeId: '',
         brandId: ''
     })
 
     useEffect(() => {
-        dispatch(loadProducts(requestSettings))
         dispatch(loadBrand()) 
         dispatch(loadType()) 
+    },[])
+
+    useEffect(() => {
+        dispatch(loadProducts(requestSettings))
     }, [requestSettings])
     
     let listProducts = useSelector((store) => store.productsReducer.products) 
     let listBrands = useSelector((store) => store.brandReducer.brands)
     let listTypes = useSelector((store) => store.typeReducer.types) 
-    
+ 
+
     async function update() {
         //console.log("here") // ??????????????????????????
-        setIsLoading(true)
-        listProducts = await useSelector((store) => store.productsReducer.products)
-        setIsLoading(false)
+        //setIsLoading(true)
+        dispatch(loadProducts(requestSettings))
+        //setIsLoading(false)
     }
 
     return (

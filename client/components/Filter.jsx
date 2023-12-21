@@ -2,18 +2,18 @@ import { View, Text } from "react-native"
 import { useEffect, useState } from "react"
 import MultiSelect from 'react-native-multiple-select';
 
-const Filter = (props) => {
+const Filter = ({listAllDetails,filter,filterName}) => {
 
     const [selected, setSelected] = useState([]);
     const [listNames, setListNames] = useState([]);
 
     useEffect(() => {
-        setListNames(props.listAllDetails.map((item) => {
+        setListNames(listAllDetails.map((item) => {
             return { id: item.id, name: item.name }
         }))
-    }, [props.listAllDetails])
+    }, [listAllDetails])
 
-    useEffect(() => props.filter(selected), [selected])
+    useEffect(() => filter(selected), [selected])
 
     return (
         <View>
@@ -26,7 +26,7 @@ const Filter = (props) => {
                         //ref={(component) => { this.multiSelect = component }}
                         onSelectedItemsChange={setSelected}
                         selectedItems={selected}
-                        selectText={props.filterName}
+                        selectText={filterName}
                         searchInputPlaceholderText="Search..."    
                         altFontFamily="ProximaNova-Light"
                         tagRemoveIconColor="#CCC"

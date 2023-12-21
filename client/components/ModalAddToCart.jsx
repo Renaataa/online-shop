@@ -1,43 +1,45 @@
 import { View, StyleSheet, Image, Text, Pressable, Modal } from "react-native";
 
 const ModalAddToCart = (props) => {
-    const imgPath = 'http://127.0.0.1:5000/' + props.product.img //????????????
-    
-    return (
-        <Modal
-            transparent={true}
-            visible={true}
-        >
-            <View style={styles.modalBackground}>
-                <View style={styles.modalWindow}>
-                    <Text style={{ fontSize: 30, fontWeight: 'bold' }}>You have added a product to your cart</Text>
 
-                    <View style={{flexDirection: 'row'}}>
-                        <Image style={styles.img} source={{uri: imgPath}} />
-                        <View style={{marginTop: 25}}>
-                            <Text style={{fontSize: 20, fontWeight: 'bold'}}>{props.product.name}</Text>
-                            <Text style={{fontSize: 15, fontWeight: 649}}>{props.product.price} zl</Text>
+    if (props.active) {
+        return (
+            <Modal
+                transparent={true}
+                visible={true}
+            >
+                <View style={styles.modalBackground}>
+                    <View style={styles.modalWindow}>
+                        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>You have added a product to your cart</Text>
+
+                        <View style={{ flexDirection: 'row' }}>
+                            <Image style={styles.img} source={{ uri: `http://127.0.0.1:5000/${props.product.img}` }} />
+                            <View style={{ marginTop: 25 }}>
+                                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{props.product.name}</Text>
+                                <Text style={{ fontSize: 15, fontWeight: 649 }}>{props.product.price} zl</Text>
+                            </View>
+                        </View>
+                        
+                        <View style={styles.btnModalBox}>
+                            <Pressable
+                                style={{ ...styles.btnModal, backgroundColor: "#F7E18A" }}
+                                onPress={() => props.changeShowModal(false)}
+                            >
+                                <Text style={styles.btnTxt}>Keep shopping</Text>
+                            </Pressable>
+                            <Pressable
+                                style={styles.btnModal}
+                                onPress={() => props.changeShowModal(false)}
+                            >
+                                <Text style={styles.btnTxt}>Go to cart</Text>
+                            </Pressable>
                         </View>
                     </View>
-                    
-                    <View style={styles.btnModalBox}>
-                        <Pressable
-                            style={{ ...styles.btnModal, backgroundColor: "#F7E18A" }}//???????????
-                            onPress={() => props.changeShowModal(false)}
-                        >
-                            <Text style={styles.btnTxt}>Keep shopping</Text>
-                        </Pressable>
-                        <Pressable
-                            style={styles.btnModal}
-                            onPress={() => props.changeShowModal(false)}
-                        >
-                            <Text style={styles.btnTxt}>Go to cart</Text>
-                        </Pressable>
-                    </View>
                 </View>
-            </View>
-        </Modal>
-    );
+            </Modal>
+        );
+    } else {return ''}
+    
 }
 
 const styles = StyleSheet.create({

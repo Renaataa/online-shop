@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const defaultState = {
-    products: []
+    products: [],
+    stateProducts: {
+        loading: 'idle'
+    }
 }
     
 export const loadProducts = createAsyncThunk('products/loadProducts', async (requestSettings) => {
-    console.log(requestSettings)
     const resp = await fetch(`http://127.0.0.1:5000/api/device?page=${requestSettings.page}&limit=${requestSettings.limit}${requestSettings.brandId}${requestSettings.typeId}`)
     return await resp.json()
 })
