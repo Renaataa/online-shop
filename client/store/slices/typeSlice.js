@@ -1,19 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const defaultState = {
-    products: [],
-    stateProducts: {
-        loading: 'idle'
-    }
+    types: []
 }
     
-export const loadProducts = createAsyncThunk('products/loadProducts', async (requestSettings) => {
-    const resp = await fetch(`http://127.0.0.1:5000/api/device?page=${requestSettings.page}&limit=${requestSettings.limit}${requestSettings.brandId}${requestSettings.typeId}`)
+export const loadType = createAsyncThunk('type/loadType', async () => {
+    const resp = await fetch(`http://127.0.0.1:5000/api/type`)
     return await resp.json()
 })
 
-const productsSlice = createSlice({
-    name: 'products',
+const typeSlice = createSlice({
+    name: 'type',
     initialState: defaultState,
     reducers: {
         //reducer
@@ -21,9 +18,9 @@ const productsSlice = createSlice({
     extraReducers: (build) => {
         build
             // addCase - То, что возвращается - является, новым состоянием 
-            .addCase(loadProducts.fulfilled, (state, action) => {
-                //console.log(action.payload.rows, 'data')
-                state.products = action.payload.rows
+            .addCase(loadType.fulfilled, (state, action) => {
+                //console.log(action.payload, 'oneDevice')
+                state.types = action.payload
 
                 // Пересоздавала память. 
                 //state = action.payload.rows 
@@ -46,6 +43,6 @@ const productsSlice = createSlice({
     }
 })
 
-export const { } = productsSlice.actions
-export const productsReducer = productsSlice.reducer
+export const { } = typeSlice.actions
+export const typeReducer = typeSlice.reducer
 
