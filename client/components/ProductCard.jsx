@@ -7,7 +7,8 @@ const ProductCard = (props) => {
         <Pressable
             style={styles.productBox}
             onPress={() => props.navigation.navigate('Product', {
-                productId: props.product.id
+                productId: props.product.id,
+                title: props.product.name
             })}
         >
             <Image style={styles.img} source={imgPath} />

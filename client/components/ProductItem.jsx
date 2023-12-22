@@ -17,6 +17,11 @@ function ProductItem (props) {
     
     const product = useSelector((store) => store.productReducer.product) 
 
+    const emailUser = 'test@gmail.com'  
+
+    //const isAuth = false // Окошко для запрашивания почты и отправка указанной почты
+    //const isAuth = true   // Отправляется запрос с почтой - emailUser
+
     const buy = () => console.log(`You ordered ${product.name} for ${product.price} zl`)
 
     if (Object.keys(product).length != 0) {
