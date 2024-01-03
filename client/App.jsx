@@ -24,7 +24,7 @@ const ScreensProducts = () => {
         headerRight: ({ navigation }) => (
           <Pressable
             style={styles.shopCart}
-            onPress={() => navigation.navigate('Cart')}
+            onPress={() => navigation.navigate('Cart')} // !!!!!!!!!!!!!!!!!!!!!!!!!!
           >
             <Feather name="shopping-bag" size={24} color="black" />
           </Pressable>

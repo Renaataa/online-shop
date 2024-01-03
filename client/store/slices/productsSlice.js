@@ -28,7 +28,7 @@ const productsSlice = createSlice({
                 //console.log(action.payload.rows, 'data')
                 state.products = action.payload.rows
                 state.stateProducts.state = StateCode[200]
-                state.stateProducts.description = ''
+                state.stateProducts.description = 'request successfully completed'
 
                 // Пересоздавала память 
                 //state = action.payload.rows 
@@ -45,7 +45,7 @@ const productsSlice = createSlice({
             })
             .addCase(loadProducts.pending, (state) => {
                 state.stateProducts.state = StateCode[102]
-                state.stateProducts.description = ''
+                state.stateProducts.description = 'request loading'
             })
     }
 })

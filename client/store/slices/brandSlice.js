@@ -1,7 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {StateCode} from 'C:/Users/renat/Desktop/Prog/Lessons/online-shop/client/enums/EnumState.ts'; // State or StateCode ????????????
 
 const defaultState = {
-    brands: []
+    brands: [],
+    stateBrand: {
+        state: StateCode[0],
+        description: 'initial state'
+    }
 }
     
 export const loadBrand = createAsyncThunk('brand/loadBrand', async () => {
@@ -21,6 +26,8 @@ const brandSlice = createSlice({
             .addCase(loadBrand.fulfilled, (state, action) => {
                 //console.log(action.payload, 'oneDevice')
                 state.brands = action.payload
+                state.stateBrand.state = StateCode[200]
+                state.stateBrand.description = 'request successfully completed'
 
                 // Пересоздавала память. 
                 //state = action.payload.rows 
@@ -31,15 +38,16 @@ const brandSlice = createSlice({
                 // str, number, bool ... -> return newState 
                 
                 //return action.payload.rows
-                //state.postsLoadState.state = 'success'
             })
-            // .addCase(loadProducts.rejected, (state) => {
-            //     state.postsLoadState.state = 'error'
-            //     state.postsLoadState.text = 'Произошла ошибка при загрузке постов, попробуйте позже'
-            // })
-            // .addCase(loadProducts.pending, (state) => {
-            //     state.postsLoadState.state = 'loading'
-            // })
+            .addCase(loadBrand.rejected, (state) => {
+                state.stateBrand.state = StateCode[500]
+                state.stateBrand.description = 'rejected request to database'
+})
+            .addCase(loadBrand.pending, (state) => {
+                state.stateBrand.state = StateCode[102]
+                state.stateBrand.description = 'request loading'
+
+            })
     }
 })
 
