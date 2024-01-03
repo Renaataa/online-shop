@@ -33,10 +33,60 @@ const ListProducts = (props) => {
     let listBrands = useSelector((store) => store.brandReducer.brands)
     let listTypes = useSelector((store) => store.typeReducer.types) 
 
+    //tmp test
+    // let listProducts = []
+    // listProducts.push(
+    //     {
+    //         "id": 1,
+    //         "name": "Smart Band 7",
+    //         "price": 250,
+    //         "rating": 0,
+    //         "img": "e17a2f3b-207d-4b73-aafd-15f0a186ddf1.jpg",
+    //         "createdAt": "2023-12-21T10:07:24.000Z",
+    //         "updatedAt": "2023-12-21T10:07:24.000Z",
+    //         "typeId": 1,
+    //         "brandId": 1
+    //     },
+    //     {
+    //         "id": 2,
+    //         "name": "Galaxy 5",
+    //         "price": 2500,
+    //         "rating": 0,
+    //         "img": "8ee09c0e-1e2a-4ef2-a452-7527199b2a5d.jpg",
+    //         "createdAt": "2023-12-21T10:08:08.000Z",
+    //         "updatedAt": "2023-12-21T10:08:08.000Z",
+    //         "typeId": 2,
+    //         "brandId": 3
+    //     },
+    //     {
+    //         "id": 3,
+    //         "name": "Galaxy S5",
+    //         "price": 3000,
+    //         "rating": 0,
+    //         "img": "952516ce-fed5-4f06-abef-2a6ecbadff31.jpg",
+    //         "createdAt": "2023-12-21T10:08:19.000Z",
+    //         "updatedAt": "2023-12-21T10:08:19.000Z",
+    //         "typeId": 2,
+    //         "brandId": 3
+    //     },
+    //     {
+    //         "id": 4,
+    //         "name": "Apple A5",
+    //         "price": 4000,
+    //         "rating": 0,
+    //         "img": "3143671b-47b3-4cc2-8973-a890bef1d011.jpg",
+    //         "createdAt": "2023-12-21T10:08:58.000Z",
+    //         "updatedAt": "2023-12-21T10:08:58.000Z",
+    //         "typeId": 2,
+    //         "brandId": 2
+    //     }
+    // )
+    
+
     async function update() {
         console.log('here') // ??????????????????????????????????
-        console.log(store.productsReducer.products.stateProducts)
         dispatch(loadProducts(requestSettings))
+        console.log(store.productsReducer.products.stateProducts)
     }
 
     return (

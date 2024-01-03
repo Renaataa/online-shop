@@ -16,7 +16,7 @@ const ModalAddToCart = (props) => {
                             <Image style={styles.img} source={{ uri: `http://127.0.0.1:5000/${props.product.img}` }} />
                             <View style={{ marginTop: 25 }}>
                                 <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{props.product.name}</Text>
-                                <Text style={{ fontSize: 15, fontWeight: 649 }}>{props.product.price} zl</Text>
+                                <Text style={{ fontSize: 15, fontWeight: 600 }}>{props.product.price} zl</Text>
                             </View>
                         </View>
                         

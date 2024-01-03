@@ -14,7 +14,7 @@ const ProductCard = (props) => {
             <Image style={styles.img} source={imgPath} />
             <View style={styles.infoBox}>
                 <Text style={{fontSize: 20, fontWeight: 'bold'}}>{props.product.name}</Text>
-                <Text style={{fontSize: 15, fontWeight: 649}}>{props.product.price} zl</Text>
+                <Text style={{fontSize: 15, fontWeight: 600}}>{props.product.price} zl</Text>
             </View>
         </Pressable>
     );
