@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
-import { useEffect } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -16,14 +15,13 @@ import CartScreen from './screens/CartScreen';
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
 
-const ScreensProducts = ({ navigation }) => {
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: 'Products',
-      title: 'Products',
-      headerRight: () => {
-        return (
+const ScreensProducts = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerTitle: 'Products',
+        title: 'Products',
+        headerRight: ({ navigation }) => (
           <Pressable
             style={styles.shopCart}
             onPress={() => navigation.navigate('Cart')}
@@ -31,13 +29,13 @@ const ScreensProducts = ({ navigation }) => {
             <Feather name="shopping-bag" size={24} color="black" />
           </Pressable>
         )  
-      }
-    })        
-  }, [])
-    
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="ListProducts" component={ListProductsScreen} options={{headerShown:false}}/>
+      }}
+    >
+      <Stack.Screen
+        name="ListProductsScreen"
+        component={ListProductsScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="Product" component={ProductScreen}/>
       <Stack.Screen name='Cart' component={CartScreen}/>
     </Stack.Navigator>
@@ -47,7 +45,7 @@ const ScreensProducts = ({ navigation }) => {
 const TabNavigator = () => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="ListProducts" component={ScreensProducts} /> 
+      <Tab.Screen name="ScreensProducts" component={ScreensProducts} /> 
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
@@ -58,7 +56,7 @@ function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <TabNavigator navigation={navigation}/>
+        <TabNavigator />
       </NavigationContainer>
     </Provider>
   )

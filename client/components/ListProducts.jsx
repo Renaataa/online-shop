@@ -32,7 +32,6 @@ const ListProducts = (props) => {
     let listProducts = useSelector((store) => store.productsReducer.products) 
     let listBrands = useSelector((store) => store.brandReducer.brands)
     let listTypes = useSelector((store) => store.typeReducer.types) 
- 
 
     async function update() {
         //console.log("here") // ??????????????????????????
@@ -78,11 +77,15 @@ const ListProducts = (props) => {
                         }
                     }}
                 >
+                    {/* {console.log(listProducts)} */}
                     <FlatList 
-                        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={update}/>}
+                        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={update} />}
                         data={listProducts}
                         keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => <ProductCard key={item.id} product={item} navigation={props.navigation} />}
+                        renderItem={({ item }) => {
+                            // console.log('listProducts'+listProducts)
+                            return <ProductCard key={item.id} product={item} navigation={props.navigation} />
+                        }}
                     />
                     <Text style={styles.pagination}>⸺⸺ {requestSettings.page} ⸺⸺</Text>
                 </Swipeable>
