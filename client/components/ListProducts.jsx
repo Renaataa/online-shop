@@ -15,7 +15,7 @@ const ListProducts = (props) => {
 
     const [requestSettings, setRequestSettings] = useState({
         page: 1,
-        limit: 4,
+        limit: 2,
         typeId: '',
         brandId: ''
     })
@@ -79,6 +79,138 @@ const ListProducts = (props) => {
     //         "updatedAt": "2023-12-21T10:08:58.000Z",
     //         "typeId": 2,
     //         "brandId": 2
+    //     },
+    //     {
+    //         "id": 11,
+    //         "name": "Smart Band 7",
+    //         "price": 250,
+    //         "rating": 0,
+    //         "img": "e17a2f3b-207d-4b73-aafd-15f0a186ddf1.jpg",
+    //         "createdAt": "2023-12-21T10:07:24.000Z",
+    //         "updatedAt": "2023-12-21T10:07:24.000Z",
+    //         "typeId": 1,
+    //         "brandId": 1
+    //     },
+    //     {
+    //         "id": 12,
+    //         "name": "Galaxy 5",
+    //         "price": 2500,
+    //         "rating": 0,
+    //         "img": "8ee09c0e-1e2a-4ef2-a452-7527199b2a5d.jpg",
+    //         "createdAt": "2023-12-21T10:08:08.000Z",
+    //         "updatedAt": "2023-12-21T10:08:08.000Z",
+    //         "typeId": 2,
+    //         "brandId": 3
+    //     },
+    //     {
+    //         "id": 13,
+    //         "name": "Galaxy S5",
+    //         "price": 3000,
+    //         "rating": 0,
+    //         "img": "952516ce-fed5-4f06-abef-2a6ecbadff31.jpg",
+    //         "createdAt": "2023-12-21T10:08:19.000Z",
+    //         "updatedAt": "2023-12-21T10:08:19.000Z",
+    //         "typeId": 2,
+    //         "brandId": 3
+    //     },
+    //     {
+    //         "id": 14,
+    //         "name": "Apple A5",
+    //         "price": 4000,
+    //         "rating": 0,
+    //         "img": "3143671b-47b3-4cc2-8973-a890bef1d011.jpg",
+    //         "createdAt": "2023-12-21T10:08:58.000Z",
+    //         "updatedAt": "2023-12-21T10:08:58.000Z",
+    //         "typeId": 2,
+    //         "brandId": 2
+    //     },
+    //     {
+    //         "id": 21,
+    //         "name": "Smart Band 7",
+    //         "price": 250,
+    //         "rating": 0,
+    //         "img": "e17a2f3b-207d-4b73-aafd-15f0a186ddf1.jpg",
+    //         "createdAt": "2023-12-21T10:07:24.000Z",
+    //         "updatedAt": "2023-12-21T10:07:24.000Z",
+    //         "typeId": 1,
+    //         "brandId": 1
+    //     },
+    //     {
+    //         "id": 22,
+    //         "name": "Galaxy 5",
+    //         "price": 2500,
+    //         "rating": 0,
+    //         "img": "8ee09c0e-1e2a-4ef2-a452-7527199b2a5d.jpg",
+    //         "createdAt": "2023-12-21T10:08:08.000Z",
+    //         "updatedAt": "2023-12-21T10:08:08.000Z",
+    //         "typeId": 2,
+    //         "brandId": 3
+    //     },
+    //     {
+    //         "id": 23,
+    //         "name": "Galaxy S5",
+    //         "price": 3000,
+    //         "rating": 0,
+    //         "img": "952516ce-fed5-4f06-abef-2a6ecbadff31.jpg",
+    //         "createdAt": "2023-12-21T10:08:19.000Z",
+    //         "updatedAt": "2023-12-21T10:08:19.000Z",
+    //         "typeId": 2,
+    //         "brandId": 3
+    //     },
+    //     {
+    //         "id": 24,
+    //         "name": "Apple A5",
+    //         "price": 4000,
+    //         "rating": 0,
+    //         "img": "3143671b-47b3-4cc2-8973-a890bef1d011.jpg",
+    //         "createdAt": "2023-12-21T10:08:58.000Z",
+    //         "updatedAt": "2023-12-21T10:08:58.000Z",
+    //         "typeId": 2,
+    //         "brandId": 2
+    //     },
+    //     {
+    //         "id": 31,
+    //         "name": "Smart Band 7",
+    //         "price": 250,
+    //         "rating": 0,
+    //         "img": "e17a2f3b-207d-4b73-aafd-15f0a186ddf1.jpg",
+    //         "createdAt": "2023-12-21T10:07:24.000Z",
+    //         "updatedAt": "2023-12-21T10:07:24.000Z",
+    //         "typeId": 1,
+    //         "brandId": 1
+    //     },
+    //     {
+    //         "id": 32,
+    //         "name": "Galaxy 5",
+    //         "price": 2500,
+    //         "rating": 0,
+    //         "img": "8ee09c0e-1e2a-4ef2-a452-7527199b2a5d.jpg",
+    //         "createdAt": "2023-12-21T10:08:08.000Z",
+    //         "updatedAt": "2023-12-21T10:08:08.000Z",
+    //         "typeId": 2,
+    //         "brandId": 3
+    //     },
+    //     {
+    //         "id": 33,
+    //         "name": "Galaxy S5",
+    //         "price": 3000,
+    //         "rating": 0,
+    //         "img": "952516ce-fed5-4f06-abef-2a6ecbadff31.jpg",
+    //         "createdAt": "2023-12-21T10:08:19.000Z",
+    //         "updatedAt": "2023-12-21T10:08:19.000Z",
+    //         "typeId": 2,
+    //         "brandId": 3
+    //     },
+    //     {
+    //         "id": 34,
+    //         "name": "Apple A5",
+    //         "price": 4000,
+    //         "rating": 0,
+    //         "img": "3143671b-47b3-4cc2-8973-a890bef1d011.jpg",
+    //         "createdAt": "2023-12-21T10:08:58.000Z",
+    //         "updatedAt": "2023-12-21T10:08:58.000Z",
+    //         "typeId": 2,
+    //         "brandId": 2
     //     }
     // )
     
@@ -92,8 +224,23 @@ const ListProducts = (props) => {
     return (
         <View style={styles.container}>
             <Filter
+                // listAllDetails={[
+                //     {
+                //         "name": 'Brands',
+                //         "id": 0,
+                //         "children": listBrands.map((item) => {
+                //             return { id: item.id, name: item.name }
+                //         })
+                //     },
+                //     {
+                //         "name": 'Types',
+                //         "id": 1,
+                //         "children": listTypes.map((item) => {
+                //             return { id: item.id, name: item.name }
+                //         })
+                //     }
+                // ]}
                 listAllDetails={listBrands}
-                filterName={'Brands'}
                 filter={(listBrandsId) => {
                     const strBrandsId = listBrandsId.reduce((accumulator, id) => accumulator + `brandId=${id}&`, '&')
                     setRequestSettings({ ...requestSettings, brandId: strBrandsId })
@@ -101,7 +248,6 @@ const ListProducts = (props) => {
             />
             <Filter
                 listAllDetails={listTypes}
-                filterName={'Types'}
                 filter={(listTypesId) => {
                     const strTypesId = listTypesId.reduce((accumulator, id) => accumulator + `typeId=${id}&`, '&')
                     setRequestSettings({ ...requestSettings, typeId: strTypesId })
@@ -110,6 +256,7 @@ const ListProducts = (props) => {
             <GestureHandlerRootView>
                 <Swipeable
                     onSwipeableWillClose={(value) => {
+                        //console.log(`length: ${listProducts.length}, page: ${requestSettings.page}`)
                         switch (value) {
                             case 'left':
                                 requestSettings.page > 1 ?
