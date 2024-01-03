@@ -1,9 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {StateCode} from 'C:/Users/renat/Desktop/Prog/Lessons/online-shop/client/enums/EnumState.ts'; // State or StateCode ????????????
+// relative path ???????????????
 
 const defaultState = {
     products: [],
     stateProducts: {
-        loading: 'idle'
+        state: StateCode[0],
+        description: ''
     }
 }
     
@@ -24,25 +27,26 @@ const productsSlice = createSlice({
             .addCase(loadProducts.fulfilled, (state, action) => {
                 //console.log(action.payload.rows, 'data')
                 state.products = action.payload.rows
+                state.stateProducts.state = StateCode[200]
+                state.stateProducts.description = ''
 
-                // Пересоздавала память. 
+                // Пересоздавала память 
                 //state = action.payload.rows 
                 
                 // Вариант добавления значения в массив 
                 //state.push(...action.payload.rows)
                 
                 // str, number, bool ... -> return newState 
-                
                 //return action.payload.rows
-                //state.postsLoadState.state = 'success'
             })
-            // .addCase(loadProducts.rejected, (state) => {
-            //     state.postsLoadState.state = 'error'
-            //     state.postsLoadState.text = 'Произошла ошибка при загрузке постов, попробуйте позже'
-            // })
-            // .addCase(loadProducts.pending, (state) => {
-            //     state.postsLoadState.state = 'loading'
-            // })
+            .addCase(loadProducts.rejected, (state) => {
+                state.stateProducts.state = StateCode[500]
+                state.stateProducts.description = 'rejected request to database'
+            })
+            .addCase(loadProducts.pending, (state) => {
+                state.stateProducts.state = StateCode[102]
+                state.stateProducts.description = ''
+            })
     }
 })
 

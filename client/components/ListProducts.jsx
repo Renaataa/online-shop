@@ -8,11 +8,11 @@ import { loadBrand } from '../store/slices/brandSlice';
 import { loadType } from '../store/slices/typeSlice';
 import ProductCard from '../components/ProductCard';
 import Filter from '../components/Filter';
+import {StateCode} from 'C:/Users/renat/Desktop/Prog/Lessons/online-shop/client/enums/EnumState.ts';
 
 const ListProducts = (props) => {
     const dispatch = useDispatch()
 
-    const [isLoading, setIsLoading] = useState(true)
     const [requestSettings, setRequestSettings] = useState({
         page: 1,
         limit: 4,
@@ -34,10 +34,9 @@ const ListProducts = (props) => {
     let listTypes = useSelector((store) => store.typeReducer.types) 
 
     async function update() {
-        //console.log("here") // ??????????????????????????
-        //setIsLoading(true)
+        console.log('here') // ??????????????????????????????????
+        console.log(store.productsReducer.products.stateProducts)
         dispatch(loadProducts(requestSettings))
-        //setIsLoading(false)
     }
 
     return (
@@ -79,7 +78,13 @@ const ListProducts = (props) => {
                 >
                     {/* {console.log(listProducts)} */}
                     <FlatList 
-                        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={update} />}
+                        style={styles.listProducts} // name of style 'listProducts' ?????????????
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={useSelector((store) => store.productsReducer.stateProducts.state != StateCode[102])}
+                                onRefresh={update}
+                            />
+                        }
                         data={listProducts}
                         keyExtractor={(item) => item.id}
                         renderItem={({ item }) => {
@@ -103,6 +108,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 17,
         fontWeight: '500'
+    },
+    listProducts: {
+        borderWidth: 1,
     }
 })
 
