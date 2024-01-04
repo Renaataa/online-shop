@@ -4,13 +4,13 @@ import {StateCode} from 'C:/Users/renat/Desktop/Prog/Lessons/online-shop/client/
 const defaultState = {
     types: [],
     stateType: {
-        state: StateCode[0],
+        state: StateCode.Idle,
         description: 'initial state'
     }
 }
     
 export const loadType = createAsyncThunk('type/loadType', async () => {
-    const resp = await fetch(`http://127.0.0.1:5000/api/type`)
+    const resp = await fetch(`http://192.168.8.158:5000/api/type`)
     return await resp.json()
 })
 
@@ -26,7 +26,7 @@ const typeSlice = createSlice({
             .addCase(loadType.fulfilled, (state, action) => {
                 //console.log(action.payload, 'oneDevice')
                 state.types = action.payload
-                state.stateType.state = StateCode[200]
+                state.stateType.state = StateCode.OK
                 state.stateType.description = 'request successfully completed'
 
                 // Пересоздавала память. 
@@ -40,11 +40,11 @@ const typeSlice = createSlice({
                 //return action.payload.rows
             })
             .addCase(loadType.rejected, (state) => {
-                state.stateType.state = StateCode[500]
+                state.stateType.state = StateCode.Error
                 state.stateType.description = 'rejected request to database'
 })
             .addCase(loadType.pending, (state) => {
-                state.stateType.state = StateCode[102]
+                state.stateType.state = StateCode.Processing
                 state.stateType.description = 'request loading'
 
             })

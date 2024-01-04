@@ -15,10 +15,9 @@ const Filter = ({ listAllDetails, filter}) => {
     }, [listAllDetails])
 
     useEffect(() => {
-        console.log(selected)
         filter(selected)
     }, [selected])
-    //console.log(listAllDetails)
+    
     return (
         <View>
             {

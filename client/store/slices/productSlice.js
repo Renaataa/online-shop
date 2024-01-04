@@ -4,13 +4,13 @@ import {StateCode} from 'C:/Users/renat/Desktop/Prog/Lessons/online-shop/client/
 const defaultState = {
     product: [],
     stateProduct: {
-        state: StateCode[0],
+        state: StateCode.Idle,
         description: ''
     }
 }
     
 export const loadProduct = createAsyncThunk('product/loadProduct', async (productId) => {
-    const resp = await fetch(`http://127.0.0.1:5000/api/device/${productId}`)
+    const resp = await fetch(`http://192.168.8.158:5000/api/device/${productId}`)
     return await resp.json()
 })
 
@@ -26,7 +26,7 @@ const productSlice = createSlice({
             .addCase(loadProduct.fulfilled, (state, action) => {
                 //console.log(action.payload, 'oneDevice')
                 state.product = action.payload
-                state.stateProduct.state = StateCode[200]
+                state.stateProduct.state = StateCode.OK
                 state.stateProduct.description = 'request successfully completed'
 
                 // Пересоздавала память. 
@@ -40,11 +40,11 @@ const productSlice = createSlice({
                 //return action.payload.rows
             })
             .addCase(loadProduct.rejected, (state) => {
-                state.stateProduct.state = StateCode[500]
+                state.stateProduct.state = StateCode.Error
                 state.stateProduct.description = 'rejected request to database'
             })
             .addCase(loadProduct.pending, (state) => {
-                state.stateProduct.state = StateCode[102]
+                state.stateProduct.state = StateCode.Processing
                 state.stateProduct.description = 'request loading'
             })
     }

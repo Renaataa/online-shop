@@ -9,32 +9,34 @@ const ModalAddToCart = (props) => {
                 visible={true}
             >
                 <View style={styles.modalBackground}>
-                    <View style={styles.modalWindow}>
-                        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>You have added a product to your cart</Text>
+                    <Pressable onPress={(e)=>e.stopPropagation()}>
+                        <View style={styles.modalWindow}>
+                            <Text style={{ fontSize: 30, fontWeight: "bold" }}>You have added a product to your cart</Text>
 
-                        <View style={{ flexDirection: 'row' }}>
-                            <Image style={styles.img} source={{ uri: `http://127.0.0.1:5000/${props.product.img}` }} />
-                            <View style={{ marginTop: 25 }}>
-                                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{props.product.name}</Text>
-                                <Text style={{ fontSize: 15, fontWeight: 600 }}>{props.product.price} zl</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Image style={styles.img} source={{ uri: `http://192.168.8.158:5000/${props.product.img}` }} />
+                                <View style={{ marginTop: 25 }}>
+                                    <Text style={{ fontSize: 20, fontWeight: "bold" }}>{props.product.name}</Text>
+                                    <Text style={{ fontSize: 15, fontWeight: "600" }}>{props.product.price} zl</Text>
+                                </View>
+                            </View>
+                            
+                            <View style={styles.btnModalBox}>
+                                <Pressable
+                                    style={{ ...styles.btnModal, backgroundColor: "#F7E18A" }}
+                                    onPress={() => props.changeShowModal(false)}
+                                >
+                                    <Text style={styles.btnTxt}>Keep shopping</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={styles.btnModal}
+                                    onPress={() => props.changeShowModal(false)}
+                                >
+                                    <Text style={styles.btnTxt}>Go to cart</Text>
+                                </Pressable>
                             </View>
                         </View>
-                        
-                        <View style={styles.btnModalBox}>
-                            <Pressable
-                                style={{ ...styles.btnModal, backgroundColor: "#F7E18A" }}
-                                onPress={() => props.changeShowModal(false)}
-                            >
-                                <Text style={styles.btnTxt}>Keep shopping</Text>
-                            </Pressable>
-                            <Pressable
-                                style={styles.btnModal}
-                                onPress={() => props.changeShowModal(false)}
-                            >
-                                <Text style={styles.btnTxt}>Go to cart</Text>
-                            </Pressable>
-                        </View>
-                    </View>
+                    </Pressable>
                 </View>
             </Modal>
         );
@@ -62,11 +64,12 @@ const styles = StyleSheet.create({
     modalBackground: {
         flex: 1, 
         alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: 'rgba(52, 52, 52, 0.8)'
     },
     modalWindow: {
         width: '95%',
-        marginTop: '80%',
+        height: '400',
         padding: 10,
         backgroundColor: 'white',
         borderRadius: 20,
@@ -79,7 +82,7 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
     },
     btnTxt: {
-        fontWeight: 600,
+        fontWeight: "600",
         textAlign: 'center',
     }
 })
