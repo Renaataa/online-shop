@@ -1,19 +1,21 @@
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 
 const ProductCard = (props) => {
-    const imgPath = 'http://127.0.0.1:5000/' + props.product.img
+
+    const imgPath = 'http://192.168.8.158:5000/' + props.product.img
     
     return (
         <Pressable
             style={styles.productBox}
             onPress={() => props.navigation.navigate('Product', {
-                productId: props.product.id
+                productId: props.product.id,
+                title: props.product.name
             })}
         >
-            <Image style={styles.img} source={imgPath} />
+            <Image style={styles.img} source={{ uri: imgPath }} />
             <View style={styles.infoBox}>
                 <Text style={{fontSize: 20, fontWeight: 'bold'}}>{props.product.name}</Text>
-                <Text style={{fontSize: 15, fontWeight: 649}}>{props.product.price} zl</Text>
+                <Text style={{fontSize: 15, fontWeight: 600}}>{props.product.price} zl</Text>
             </View>
         </Pressable>
     );

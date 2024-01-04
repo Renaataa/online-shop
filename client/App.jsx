@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
-import { useEffect } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -36,8 +35,25 @@ const ScreensProducts = ({ navigation }) => {
   }, [])
     
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="ListProducts" component={ListProductsScreen} options={{headerShown:false}}/>
+    <Stack.Navigator
+      screenOptions={{
+        headerTitle: 'Products',
+        title: 'Products',
+        headerRight: ({ navigation }) => (
+          <Pressable
+            style={styles.shopCart}
+            onPress={() => navigation.navigate('Cart')} // !!!!!!!!!!!!!!!!!!!!!!!!!!
+          >
+            <Feather name="shopping-bag" size={24} color="black" />
+          </Pressable>
+        )  
+      }}
+    >
+      <Stack.Screen
+        name="ListProductsScreen"
+        component={ListProductsScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="Product" component={ProductScreen}/>
       <Stack.Screen name='Cart' component={CartScreen}/>
     </Stack.Navigator>
@@ -47,7 +63,7 @@ const ScreensProducts = ({ navigation }) => {
 const TabNavigator = () => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="ListProducts" component={ScreensProducts} /> 
+      <Tab.Screen name="ScreensProducts" component={ScreensProducts} /> 
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>

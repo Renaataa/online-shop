@@ -8,14 +8,14 @@ import { loadBrand } from '../store/slices/brandSlice';
 import { loadType } from '../store/slices/typeSlice';
 import ProductCard from '../components/ProductCard';
 import Filter from '../components/Filter';
+import {StateCode} from 'C:/Users/renat/Desktop/Prog/Lessons/online-shop/client/enums/EnumState.ts';
 
 const ListProducts = (props) => {
     const dispatch = useDispatch()
 
-    const [isLoading, setIsLoading] = useState(true)
     const [requestSettings, setRequestSettings] = useState({
         page: 1,
-        limit: 4,
+        limit: 2,
         typeId: '',
         brandId: ''
     })
@@ -31,32 +31,26 @@ const ListProducts = (props) => {
     
     let listProducts = useSelector((store) => store.productsReducer.products) 
     let listBrands = useSelector((store) => store.brandReducer.brands)
-    let listTypes = useSelector((store) => store.typeReducer.types) 
- 
+    let listTypes = useSelector((store) => store.typeReducer.types)     
 
     async function update() {
-        //console.log("here") // ??????????????????????????
-        //setIsLoading(true)
         dispatch(loadProducts(requestSettings))
-        //setIsLoading(false)
     }
 
     return (
         <View style={styles.container}>
             <Filter
                 listAllDetails={listBrands}
-                filterName={'Brands'}
                 filter={(listBrandsId) => {
                     const strBrandsId = listBrandsId.reduce((accumulator, id) => accumulator + `brandId=${id}&`, '&')
-                    setRequestSettings({ ...requestSettings, brandId: strBrandsId })
+                    setRequestSettings({ ...requestSettings, page: 1, brandId: strBrandsId })
                 }}
             />
             <Filter
                 listAllDetails={listTypes}
-                filterName={'Types'}
                 filter={(listTypesId) => {
                     const strTypesId = listTypesId.reduce((accumulator, id) => accumulator + `typeId=${id}&`, '&')
-                    setRequestSettings({ ...requestSettings, typeId: strTypesId })
+                    setRequestSettings({ ...requestSettings, page: 1, typeId: strTypesId })
                 }}
             />
             <GestureHandlerRootView>
@@ -79,10 +73,19 @@ const ListProducts = (props) => {
                     }}
                 >
                     <FlatList 
-                        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={update}/>}
+                        style={styles.listProducts} // name of style 'listProducts' ?????????????
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={useSelector((store) => store.productsReducer.stateProducts.state == StateCode.Processing)}
+                                onRefresh={update}
+                            />
+                        }
                         data={listProducts}
                         keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => <ProductCard key={item.id} product={item} navigation={props.navigation} />}
+                        renderItem={({ item }) => {
+                            // console.log('listProducts'+listProducts)
+                            return <ProductCard key={item.id} product={item} navigation={props.navigation} />
+                        }}
                     />
                     <Text style={styles.pagination}>⸺⸺ {requestSettings.page} ⸺⸺</Text>
                 </Swipeable>
@@ -100,40 +103,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 17,
         fontWeight: '500'
-    }
-})
-
-export default ListProducts;import { View, StyleSheet } from 'react-native'; 
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { loadProducts } from '../store/slices/productsSlice';
-import ProductCard from '../components/ProductCard';
-
-const ListProducts = (props) => {
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        dispatch(loadProducts()) 
-    }, [])
-    
-    const listProducts = useSelector((store)=>store.productsReducer.products)
-    //console.log(listProducts)   
-
-    return (
-        <View style={styles.container}>
-            {
-                listProducts.map((product) => {
-                    return <ProductCard key={product.id} product={product} navigation={props.navigation} />
-                })
-            }
-        </View>
-    );
-}
-
-const styles = StyleSheet.create({
-    container: {
-        justifyContent: 'flex-start',
-        margin: 20
+    },
+    listProducts: {
+        borderWidth: 1,
     }
 })
 

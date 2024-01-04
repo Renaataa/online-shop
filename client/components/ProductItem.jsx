@@ -17,46 +17,53 @@ function ProductItem (props) {
     
     const product = useSelector((store) => store.productReducer.product) 
 
+    const emailUser = 'test@gmail.com'  
+
+    //const isAuth = false // Окошко для запрашивания почты и отправка указанной почты
+    //const isAuth = true   // Отправляется запрос с почтой - emailUser
+
     const buy = () => console.log(`You ordered ${product.name} for ${product.price} zl`)
 
     if (Object.keys(product).length != 0) {
         return (
-            <View>
-                <View style={{flexDirection: 'row'}}>
-                    <View>
-                        <Image source={{uri: `http://127.0.0.1:5000/${product.img}`}} style={styles.img} />  
+            <Pressable onPress={() => { setShowModal(false); console.log('press') }}>
+                <View>
+                    <View style={{flexDirection: 'row'}}>
+                        <View>
+                            <Image source={{uri: `http://192.168.8.158:5000/${product.img}`}} style={styles.img} />  
+                        </View>
+                        <View style={styles.productInfo}>
+                            <Text style={{ fontSize: 27, fontWeight: 'bold' }}>{product.name}</Text>
+                            {
+                                product.info ?
+                                    <ListProductInfo info={product.info} />
+                                :
+                                    <Text> </Text>
+                            }
+                            <Text style={{ fontSize: 20, fontWeight: 600 }}>{product.price} zl</Text>
+                        </View>
                     </View>
-                    <View style={styles.productInfo}>
-                        <Text style={{ fontSize: 27, fontWeight: 'bold' }}>{product.name}</Text>
-                        {
-                            product.info ?
-                                <ListProductInfo info={product.info} />
-                            :
-                                <Text> </Text>
-                        }
-                        <Text style={{ fontSize: 20, fontWeight: 650 }}>{product.price} zl</Text>
-                    </View>
+
+                    <Pressable
+                        style={{ ...styles.btn, backgroundColor: "#F7E18A" }}
+                        onPress={() => setShowModal(true)}
+                    >
+                        <Text style={styles.btnTxt}>Add to cart</Text>
+                    </Pressable>
+                    <Pressable
+                        style={styles.btn}
+                        onPress={buy}
+                    >
+                        <Text style={styles.btnTxt}>Buy</Text>
+                    </Pressable>
+                    
+                    <ModalAddToCart
+                        product={product}
+                        changeShowModal={(value) => setShowModal(value)}
+                        active={showModal}
+                    />
                 </View>
-
-                <Pressable
-                    style={{ ...styles.btn, backgroundColor: "#F7E18A" }}
-                    onPress={() => setShowModal(true)}
-                >
-                    <Text style={styles.btnTxt}>Add to cart</Text>
-                </Pressable>
-                <Pressable
-                    style={styles.btn}
-                    onPress={buy}
-                >
-                    <Text style={styles.btnTxt}>Buy</Text>
-                </Pressable>
-
-                <ModalAddToCart
-                    product={product}
-                    changeShowModal={(value) => setShowModal(value)}
-                    active={showModal}
-                />
-            </View>
+            </Pressable>
         );
     } else {return ''}
 }

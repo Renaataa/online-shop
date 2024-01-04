@@ -31,6 +31,7 @@ class DeviceController {
     }
 
     async getAll(req, res) {
+        console.log('here')
         let {brandId, typeId, limit, page} = req.query
         
         if (page) {

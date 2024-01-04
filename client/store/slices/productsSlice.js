@@ -1,14 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {StateCode} from 'C:/Users/renat/Desktop/Prog/Lessons/online-shop/client/enums/EnumState.ts'; // State or StateCode ????????????
+// relative path ???????????????
 
 const defaultState = {
     products: [],
+    countProducts: 0,
     stateProducts: {
-        loading: 'idle'
+        state: StateCode[0],
+        description: ''
     }
 }
     
 export const loadProducts = createAsyncThunk('products/loadProducts', async (requestSettings) => {
-    const resp = await fetch(`http://127.0.0.1:5000/api/device?page=${requestSettings.page}&limit=${requestSettings.limit}${requestSettings.brandId}${requestSettings.typeId}`)
+    const resp = await fetch(`http://192.168.8.158:5000/api/device?page=${requestSettings.page}&limit=${requestSettings.limit}${requestSettings.brandId}${requestSettings.typeId}`)
     return await resp.json()
 })
 
@@ -24,25 +28,27 @@ const productsSlice = createSlice({
             .addCase(loadProducts.fulfilled, (state, action) => {
                 //console.log(action.payload.rows, 'data')
                 state.products = action.payload.rows
+                //state.stateProducts.countProducts = 
+                state.stateProducts.state = StateCode.OK
+                state.stateProducts.description = 'request successfully completed'
 
-                // Пересоздавала память. 
+                // Пересоздавала память 
                 //state = action.payload.rows 
                 
                 // Вариант добавления значения в массив 
                 //state.push(...action.payload.rows)
                 
                 // str, number, bool ... -> return newState 
-                
                 //return action.payload.rows
-                //state.postsLoadState.state = 'success'
             })
-            // .addCase(loadProducts.rejected, (state) => {
-            //     state.postsLoadState.state = 'error'
-            //     state.postsLoadState.text = 'Произошла ошибка при загрузке постов, попробуйте позже'
-            // })
-            // .addCase(loadProducts.pending, (state) => {
-            //     state.postsLoadState.state = 'loading'
-            // })
+            .addCase(loadProducts.rejected, (state) => {
+                state.stateProducts.state = StateCode.Error
+                state.stateProducts.description = 'rejected request to database'
+            })
+            .addCase(loadProducts.pending, (state) => {
+                state.stateProducts.state = StateCode.Processing
+                state.stateProducts.description = 'request loading'
+            })
     }
 })
 

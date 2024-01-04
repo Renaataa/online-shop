@@ -1,8 +1,9 @@
 import { View, Text } from "react-native"
 import { useEffect, useState } from "react"
-import MultiSelect from 'react-native-multiple-select';
+import { MaterialIcons } from '@expo/vector-icons';
+import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 
-const Filter = ({listAllDetails,filter,filterName}) => {
+const Filter = ({ listAllDetails, filter}) => {
 
     const [selected, setSelected] = useState([]);
     const [listNames, setListNames] = useState([]);
@@ -13,30 +14,24 @@ const Filter = ({listAllDetails,filter,filterName}) => {
         }))
     }, [listAllDetails])
 
-    useEffect(() => filter(selected), [selected])
-
+    useEffect(() => {
+        filter(selected)
+    }, [selected])
+    
     return (
         <View>
             {
-                listNames.length != 0 ?
-                    <MultiSelect
-                        hideTags
+                listAllDetails.length != 0 ?
+                    <SectionedMultiSelect
                         items={listNames}
+                        IconRenderer={MaterialIcons}
                         uniqueKey="id"
-                        //ref={(component) => { this.multiSelect = component }}
+                        //subKey="children"
+                        //readOnlyHeadings={true}
+                        selectText="Choose some things..."
+                        showDropDowns={true}
                         onSelectedItemsChange={setSelected}
                         selectedItems={selected}
-                        selectText={filterName}
-                        searchInputPlaceholderText="Search..."    
-                        altFontFamily="ProximaNova-Light"
-                        tagRemoveIconColor="#CCC"
-                        tagBorderColor="#CCC"
-                        tagTextColor="#CCC"
-                        selectedItemTextColor="#CCC"
-                        selectedItemIconColor="#CCC"
-                        itemTextColor="#000"
-                        displayKey="name"
-                        searchInputStyle={{ color: '#CCC' }}
                     />
                 :
                     <Text></Text>

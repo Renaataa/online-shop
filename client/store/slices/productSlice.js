@@ -1,11 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {StateCode} from 'C:/Users/renat/Desktop/Prog/Lessons/online-shop/client/enums/EnumState.ts'; // State or StateCode ????????????
 
 const defaultState = {
-    product: []
+    product: [],
+    stateProduct: {
+        state: StateCode.Idle,
+        description: ''
+    }
 }
     
 export const loadProduct = createAsyncThunk('product/loadProduct', async (productId) => {
-    const resp = await fetch(`http://127.0.0.1:5000/api/device/${productId}`)
+    const resp = await fetch(`http://192.168.8.158:5000/api/device/${productId}`)
     return await resp.json()
 })
 
@@ -21,6 +26,8 @@ const productSlice = createSlice({
             .addCase(loadProduct.fulfilled, (state, action) => {
                 //console.log(action.payload, 'oneDevice')
                 state.product = action.payload
+                state.stateProduct.state = StateCode.OK
+                state.stateProduct.description = 'request successfully completed'
 
                 // Пересоздавала память. 
                 //state = action.payload.rows 
@@ -31,15 +38,15 @@ const productSlice = createSlice({
                 // str, number, bool ... -> return newState 
                 
                 //return action.payload.rows
-                //state.postsLoadState.state = 'success'
             })
-            // .addCase(loadProducts.rejected, (state) => {
-            //     state.postsLoadState.state = 'error'
-            //     state.postsLoadState.text = 'Произошла ошибка при загрузке постов, попробуйте позже'
-            // })
-            // .addCase(loadProducts.pending, (state) => {
-            //     state.postsLoadState.state = 'loading'
-            // })
+            .addCase(loadProduct.rejected, (state) => {
+                state.stateProduct.state = StateCode.Error
+                state.stateProduct.description = 'rejected request to database'
+            })
+            .addCase(loadProduct.pending, (state) => {
+                state.stateProduct.state = StateCode.Processing
+                state.stateProduct.description = 'request loading'
+            })
     }
 })
 
