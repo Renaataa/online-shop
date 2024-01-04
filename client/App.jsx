@@ -15,7 +15,25 @@ import CartScreen from './screens/CartScreen';
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
 
-const ScreensProducts = () => {
+const ScreensProducts = ({ navigation }) => {
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: 'Products',
+      title: 'Products',
+      headerRight: () => {
+        return (
+          <Pressable
+            style={styles.shopCart}
+            onPress={() => navigation.navigate('Cart')}
+          >
+            <Feather name="shopping-bag" size={24} color="black" />
+          </Pressable>
+        )  
+      }
+    })        
+  }, [])
+    
   return (
     <Stack.Navigator
       screenOptions={{
@@ -56,7 +74,7 @@ function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <TabNavigator />
+        <TabNavigator navigation={navigation}/>
       </NavigationContainer>
     </Provider>
   )

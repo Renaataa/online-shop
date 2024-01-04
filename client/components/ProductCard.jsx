@@ -1,6 +1,7 @@
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 
 const ProductCard = (props) => {
+
     const imgPath = 'http://192.168.8.158:5000/' + props.product.img
     
     return (
