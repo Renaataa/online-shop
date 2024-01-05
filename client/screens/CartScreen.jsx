@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 const CartScreen = () => {
     return (
         <View>
-            <Text>Home Screen</Text>
+            <Text>Cart Screen</Text>
         </View>
     );
 }

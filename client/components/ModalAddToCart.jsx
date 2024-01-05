@@ -1,8 +1,8 @@
 import { View, StyleSheet, Image, Text, Pressable, Modal } from "react-native";
 
-const ModalAddToCart = (props) => {
+const ModalAddToCart = ({active, product, changeShowModal}) => {
 
-    if (props.active) {
+    if (active) {
         return (
             <Modal
                 transparent={true}
@@ -14,23 +14,23 @@ const ModalAddToCart = (props) => {
                             <Text style={{ fontSize: 30, fontWeight: "bold" }}>You have added a product to your cart</Text>
 
                             <View style={{ flexDirection: 'row' }}>
-                                <Image style={styles.img} source={{ uri: `http://192.168.8.158:5000/${props.product.img}` }} />
+                                <Image style={styles.img} source={{ uri: `http://192.168.8.158:5000/${product.img}` }} />
                                 <View style={{ marginTop: 25 }}>
-                                    <Text style={{ fontSize: 20, fontWeight: "bold" }}>{props.product.name}</Text>
-                                    <Text style={{ fontSize: 15, fontWeight: "600" }}>{props.product.price} zl</Text>
+                                    <Text style={{ fontSize: 20, fontWeight: "bold" }}>{product.name}</Text>
+                                    <Text style={{ fontSize: 15, fontWeight: "600" }}>{product.price} zl</Text>
                                 </View>
                             </View>
                             
                             <View style={styles.btnModalBox}>
                                 <Pressable
                                     style={{ ...styles.btnModal, backgroundColor: "#F7E18A" }}
-                                    onPress={() => props.changeShowModal(false)}
+                                    onPress={() => changeShowModal(false)}
                                 >
                                     <Text style={styles.btnTxt}>Keep shopping</Text>
                                 </Pressable>
                                 <Pressable
                                     style={styles.btnModal}
-                                    onPress={() => props.changeShowModal(false)}
+                                    onPress={() => changeShowModal(false)}
                                 >
                                     <Text style={styles.btnTxt}>Go to cart</Text>
                                 </Pressable>

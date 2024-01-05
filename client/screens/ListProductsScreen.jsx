@@ -1,20 +1,30 @@
 import { View } from 'react-native';
 import { useState } from 'react';
 import ListProducts from '../components/ListProducts';
+import FilteredProducts from '../components/FilteredProducts';
 
-export default function ListProductsScreen({ navigation }) {    
+export default function ListProductsScreen({ navigation }) {   
 
   const [requestSettings, setRequestSettings] = useState({
-      page: 1,
-      limit: 4,
-      typeId: '',
-      brandId: ''
+    page: 1,
+    limit: 4,
+    typeId: '',
+    brandId: ''
   })
   
   return (
     <View>
-      {/* <FilteredProducts/>  */}
-      <ListProducts navigation={navigation} />
+      <FilteredProducts
+        filterFunc={(listId, property) => {
+          const strId = listId.reduce((accumulator, id) => accumulator + `${property}=${id}&`, '&')
+          setRequestSettings({ ...requestSettings, page: 1, [property]: strId })
+        }}
+      /> 
+      <ListProducts
+        navigation={navigation}
+        requestSettings={requestSettings}
+        changePage={newPage => setRequestSettings({ ...requestSettings, page: newPage })}
+      />
     </View>
   )
 }

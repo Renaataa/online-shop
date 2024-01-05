@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { MaterialIcons } from '@expo/vector-icons';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 
-const Filter = ({ listAllDetails, filter}) => {
+const Filter = ({ listAllDetails, filteredItems, filterFunc}) => {
 
     const [selected, setSelected] = useState([]);
     const [listNames, setListNames] = useState([]);
@@ -15,7 +15,7 @@ const Filter = ({ listAllDetails, filter}) => {
     }, [listAllDetails])
 
     useEffect(() => {
-        filter(selected)
+        filterFunc(selected, `${filteredItems}Id`)
     }, [selected])
     
     return (
@@ -26,10 +26,9 @@ const Filter = ({ listAllDetails, filter}) => {
                         items={listNames}
                         IconRenderer={MaterialIcons}
                         uniqueKey="id"
-                        //subKey="children"
-                        //readOnlyHeadings={true}
-                        selectText="Choose some things..."
+                        selectText={`${filteredItems}s`}
                         showDropDowns={true}
+                        showChips={false}
                         onSelectedItemsChange={setSelected}
                         selectedItems={selected}
                     />
