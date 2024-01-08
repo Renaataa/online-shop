@@ -22,7 +22,22 @@ function ProductItem (props) {
     //const isAuth = false // Окошко для запрашивания почты и отправка указанной почты
     //const isAuth = true   // Отправляется запрос с почтой - emailUser
 
-    const buy = () => console.log(`You ordered ${product.name} for ${product.price} zl`)
+    const buy = () => {
+        const randomOrderNum = Math.floor(Math.random() * 1000) + 1000;
+
+        const address = 'https://api.telegram.org';
+        const tokenBot = '6933693870:AAH0wYqM7MqTvjFjhUTnuyREliflYtYCAbY';
+        const method = 'sendMessage';
+        const client = 695269926;
+        const text = '*Новый заказ:*_'+randomOrderNum+'_\n*Email:* `email@gmail\\.com`\n*Товар:* '+product.name; // ????????????????????
+
+        const encodedText = encodeURIComponent(text);
+
+        fetch(`${address}/bot${tokenBot}/${method}?chat_id=${client}&parse_mode=MarkdownV2&text=${encodedText}`)
+        .then(resp => resp.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Ошибка:', error));
+    }
 
     if (Object.keys(product).length != 0) {
         return (
