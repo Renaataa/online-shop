@@ -28,7 +28,7 @@ const productsSlice = createSlice({
             .addCase(loadProducts.fulfilled, (state, action) => {
                 //console.log(action.payload.rows, 'data')
                 state.products = action.payload.rows
-                //state.stateProducts.countProducts = 
+                state.countProducts = action.payload.count
                 state.stateProducts.state = StateCode.OK
                 state.stateProducts.description = 'request successfully completed'
 

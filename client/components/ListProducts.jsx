@@ -7,15 +7,22 @@ import { loadProducts } from '../store/slices/productsSlice';
 import ProductCard from '../components/ProductCard';
 import {StateCode} from 'C:/Users/renat/Desktop/Prog/Lessons/online-shop/client/enums/EnumState.ts';
 
-const ListProducts = ({navigation, requestSettings, changePage}) => {
+const ListProducts = ({ navigation, requestSettings, changePage }) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(loadProducts(requestSettings))
     }, [requestSettings])
     
-    let listProducts = useSelector((store) => store.productsReducer.products)   
-
+    // why doesnt useState work - too many re-renders ???????????? 
+    // is this code redable ?????????
+    let lastPage
+    let listProducts
+    useSelector((store) => {
+        lastPage = store.productsReducer.countProducts / requestSettings.limit
+        listProducts = store.productsReducer.products
+    })  
+    
     async function update() {
         dispatch(loadProducts(requestSettings))
     }
@@ -33,7 +40,7 @@ const ListProducts = ({navigation, requestSettings, changePage}) => {
                                     ''
                                 break
                             case 'right':
-                                listProducts.length < requestSettings.limit ?
+                                requestSettings.page >= lastPage ?
                                     ''
                                 :
                                     changePage(requestSettings.page + 1)
