@@ -1,4 +1,4 @@
-import { View, StyleSheet, Image, Text, Pressable } from "react-native";
+import { View, Image, Text, Pressable, StyleSheet, Dimensions } from "react-native";
 import { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +9,7 @@ import ListProductInfo from "./ListProductInfo";
 
 function ProductItem (props) {
     const dispatch = useDispatch()    
+    const {width, height} = Dimensions.get('window')
     const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
@@ -29,8 +30,8 @@ function ProductItem (props) {
         const tokenBot = '6933693870:AAH0wYqM7MqTvjFjhUTnuyREliflYtYCAbY';
         const method = 'sendMessage';
         const client = 695269926;
-        const text = '*Новый заказ:*_'+randomOrderNum+'_\n*Email:* `email@gmail\\.com`\n*Товар:* '+product.name; // ????????????????????
-
+        // я не могу использовать `` ????????????????????
+        const text = '*Новый заказ:*_'+randomOrderNum+'_\n*Email:* `email@gmail\\.com`\n*Товар:* '+product.name; 
         const encodedText = encodeURIComponent(text);
 
         fetch(`${address}/bot${tokenBot}/${method}?chat_id=${client}&parse_mode=MarkdownV2&text=${encodedText}`)
@@ -39,16 +40,51 @@ function ProductItem (props) {
         .catch(error => console.error('Ошибка:', error));
     }
 
+    const getStyles = () => {
+        const styles = {
+            productInfo: {
+                justifyContent: 'space-between',
+                paddingHorizontal: 10
+            },
+            img: {
+                width: 150,
+                height: 250
+            },
+            btn: {
+                alignSelf: 'center',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 25,
+                width: '95%',
+                height: 40,
+                backgroundColor: '#F99A6B',
+                borderRadius: 20
+            },
+            btnTxt: {
+                fontWeight: 'bold',
+                textAlign: 'center',
+            },
+            productNameTxt: {
+                width: '90%',
+                fontSize: 27,
+                fontWeight: 'bold'
+            }
+        }
+
+        return StyleSheet.create(styles)
+    }
+    const styles = getStyles()
+
     if (Object.keys(product).length != 0) {
         return (
-            <Pressable onPress={() => { setShowModal(false); console.log('press') }}>
+            <Pressable onPress={() => setShowModal(false) }>
                 <View>
                     <View style={{flexDirection: 'row'}}>
                         <View>
                             <Image source={{uri: `http://192.168.8.158:5000/${product.img}`}} style={styles.img} />  
                         </View>
                         <View style={styles.productInfo}>
-                            <Text style={{ fontSize: 27, fontWeight: 'bold' }}>{product.name}</Text>
+                            <Text style={styles.productNameTxt}>{product.name}</Text>
                             {
                                 product.info ?
                                     <ListProductInfo info={product.info} />
@@ -82,31 +118,6 @@ function ProductItem (props) {
         );
     } else {return ''}
 }
-
-const styles = StyleSheet.create({
-    productInfo: {
-        justifyContent: 'space-between',
-        paddingHorizontal: 10
-    },
-    img: {
-        width: 250,
-        height: 350
-    },
-    btn: {
-        alignSelf: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 25,
-        width: '95%',
-        height: 40,
-        backgroundColor: '#F99A6B',
-        borderRadius: 20
-    },
-    btnTxt: {
-        fontWeight: 'bold',
-        textAlign: 'center',
-    }
-})
 
 export default ProductItem;
 

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, RefreshControl } from 'react-native'; 
+import { View, Text, StyleSheet, Dimensions, FlatList, RefreshControl } from 'react-native'; 
 import { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -9,7 +9,8 @@ import {StateCode} from 'C:/Users/renat/Desktop/Prog/Lessons/online-shop/client/
 
 const ListProducts = ({ navigation, requestSettings, changePage }) => {
     const dispatch = useDispatch()
-
+    const { width, height } = Dimensions.get('window')
+    
     useEffect(() => {
         dispatch(loadProducts(requestSettings))
     }, [requestSettings])
@@ -26,6 +27,30 @@ const ListProducts = ({ navigation, requestSettings, changePage }) => {
     async function update() {
         dispatch(loadProducts(requestSettings))
     }
+
+    const getStyles = () => {
+        const styles = {
+            container: {
+                justifyContent: 'flex-start',
+                margin: 20
+            },
+            pagination: {
+                textAlign: 'center',
+                fontSize: 17,
+                fontWeight: '500'
+            },
+            listProducts: {
+                borderWidth: 1,
+            }
+        }
+        
+        if (width >= 900) styles.pagination.fontSize = 26
+        else if (width >= 700) styles.pagination.fontSize = 22
+        else if (width >= 500) styles.pagination.fontSize = 18
+
+        return StyleSheet.create(styles)
+    }
+    const styles = getStyles() // can I put it before function getStyles ????????????????????????
 
     return (
         <View style={styles.container}>
@@ -69,20 +94,5 @@ const ListProducts = ({ navigation, requestSettings, changePage }) => {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        justifyContent: 'flex-start',
-        margin: 20
-    },
-    pagination: {
-        textAlign: 'center',
-        fontSize: 17,
-        fontWeight: '500'
-    },
-    listProducts: {
-        borderWidth: 1,
-    }
-})
 
 export default ListProducts;

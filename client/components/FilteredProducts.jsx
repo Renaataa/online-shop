@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadBrand } from '../store/slices/brandSlice';
@@ -15,17 +15,15 @@ const FilteredProducts = ({filterFunc}) => {
     
     let listBrands = useSelector((store) => store.brandReducer.brands)
     let listTypes = useSelector((store) => store.typeReducer.types) 
-  
+
     return (
-        <View style={styles.container}>
+        <View>
             <Filter
-                style={styles.filter}
                 listAllDetails={listBrands}
                 filteredItems={'brand'}
                 filterFunc={filterFunc}
             />
             <Filter
-                style={styles.filter}
                 listAllDetails={listTypes}
                 filteredItems={'type'}
                 filterFunc={filterFunc}
@@ -33,16 +31,5 @@ const FilteredProducts = ({filterFunc}) => {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly'
-    },
-    filter: {
-        width: '50%',
-        justifyContent: 'flex-start'
-    }
-})
 
 export default FilteredProducts;
