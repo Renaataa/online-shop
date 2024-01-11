@@ -7,13 +7,13 @@ import { loadProduct } from '../store/slices/productSlice';
 import ModalAddToCart from "./ModalAddToCart";
 import ListProductInfo from "./ListProductInfo";
 
-function ProductItem (props) {
+function ProductItem ({productId}) {
     const dispatch = useDispatch()    
     const {width, height} = Dimensions.get('window')
     const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
-        dispatch(loadProduct(props.productId)) 
+        dispatch(loadProduct(productId)) 
     }, [])
     
     const product = useSelector((store) => store.productReducer.product) 
@@ -44,11 +44,13 @@ function ProductItem (props) {
         const styles = {
             productInfo: {
                 justifyContent: 'space-between',
-                paddingHorizontal: 10
+                paddingHorizontal: 10,
+                width: '50%'
             },
             img: {
-                width: 150,
-                height: 250
+                width: '100%',
+                height: 250,
+                resizeMode: 'contain'
             },
             btn: {
                 alignSelf: 'center',
@@ -65,9 +67,12 @@ function ProductItem (props) {
                 textAlign: 'center',
             },
             productNameTxt: {
-                width: '90%',
+                width: '100%',
                 fontSize: 27,
                 fontWeight: 'bold'
+            },
+            imageBlock: {
+                width: '50%'
             }
         }
 
@@ -79,8 +84,8 @@ function ProductItem (props) {
         return (
             <Pressable onPress={() => setShowModal(false) }>
                 <View>
-                    <View style={{flexDirection: 'row'}}>
-                        <View>
+                    <View style={{ flexDirection: 'row', width: '100%'}}>
+                        <View style={styles.imageBlock}>
                             <Image source={{uri: `http://192.168.8.158:5000/${product.img}`}} style={styles.img} />  
                         </View>
                         <View style={styles.productInfo}>
@@ -91,7 +96,7 @@ function ProductItem (props) {
                                 :
                                     <Text> </Text>
                             }
-                            <Text style={{ fontSize: 20, fontWeight: 600 }}>{product.price} zl</Text>
+                            <Text style={{ fontSize: 20, fontWeight: '600' }}>{product.price} zl</Text>
                         </View>
                     </View>
 

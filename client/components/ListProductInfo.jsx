@@ -1,10 +1,10 @@
 import { View, Text } from "react-native";
 
-const ListProductInfo = (props) => {
+const ListProductInfo = ({info}) => {
     return (
         <View>
             {
-                props.info.map((сharacteristic) => {
+                info.map((сharacteristic) => {
                     return <Text key={сharacteristic.id}>{сharacteristic.title}: {сharacteristic.description}</Text>
                 })
             } 

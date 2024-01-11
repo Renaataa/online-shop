@@ -9,7 +9,7 @@ export default function ListProductsScreen({ navigation }) {
 
   const [requestSettings, setRequestSettings] = useState({
     page: 1,
-    limit: Math.floor(height/147-1.6),
+    limit: 1,
     typeId: '',
     brandId: ''
   })
@@ -26,6 +26,8 @@ export default function ListProductsScreen({ navigation }) {
         navigation={navigation}
         requestSettings={requestSettings}
         changePage={newPage => setRequestSettings({ ...requestSettings, page: newPage })}
+        // ?????????????????????????
+        setLimit={newLimit => setRequestSettings({...requestSettings, limit: newLimit})}
       />
     </View>
   )

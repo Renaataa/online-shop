@@ -7,7 +7,7 @@ import { loadProducts } from '../store/slices/productsSlice';
 import ProductCard from '../components/ProductCard';
 import {StateCode} from 'C:/Users/renat/Desktop/Prog/Lessons/online-shop/client/enums/EnumState.ts';
 
-const ListProducts = ({ navigation, requestSettings, changePage }) => {
+const ListProducts = ({ navigation, requestSettings, changePage, setLimit }) => {
     const dispatch = useDispatch()
     const { width, height } = Dimensions.get('window')
     
@@ -15,22 +15,20 @@ const ListProducts = ({ navigation, requestSettings, changePage }) => {
         dispatch(loadProducts(requestSettings))
     }, [requestSettings])
     
-    // why doesnt useState work - too many re-renders ???????????? 
-    // is this code redable ?????????
-    let lastPage
-    let listProducts
-    useSelector((store) => {
-        lastPage = store.productsReducer.countProducts / requestSettings.limit
-        listProducts = store.productsReducer.products
-    })  
+    // v1
+    let countProducts = useSelector((store) => store.productsReducer.countProducts)
+    let listProducts = useSelector((store) => store.productsReducer.products)
+    // v2 - выдает ошибку внутри предупреждения в браузере и не работает на моб емуляторе
+    //let [countProducts, listProducts] = useSelector((store) => [store.productsReducer.countProducts, store.productsReducer.products])
     
     async function update() {
         dispatch(loadProducts(requestSettings))
     }
-
+    
     const getStyles = () => {
         const styles = {
             container: {
+                flex: 1,
                 justifyContent: 'flex-start',
                 margin: 20
             },
@@ -40,17 +38,18 @@ const ListProducts = ({ navigation, requestSettings, changePage }) => {
                 fontWeight: '500'
             },
             listProducts: {
-                borderWidth: 1,
+                flex: 1,
+                borderWidth: 1
             }
         }
         
         if (width >= 900) styles.pagination.fontSize = 26
         else if (width >= 700) styles.pagination.fontSize = 22
         else if (width >= 500) styles.pagination.fontSize = 18
-
+        
         return StyleSheet.create(styles)
     }
-    const styles = getStyles() // can I put it before function getStyles ????????????????????????
+    const styles = getStyles() 
 
     return (
         <View style={styles.container}>
@@ -59,22 +58,18 @@ const ListProducts = ({ navigation, requestSettings, changePage }) => {
                     onSwipeableWillClose={(value) => {
                         switch (value) {
                             case 'left':
-                                requestSettings.page > 1 ?
+                                if (requestSettings.page > 1) 
                                     changePage(requestSettings.page - 1)
-                                :
-                                    ''
                                 break
                             case 'right':
-                                requestSettings.page >= lastPage ?
-                                    ''
-                                :
+                                if (requestSettings.page < countProducts / requestSettings.limit) 
                                     changePage(requestSettings.page + 1)
                                 break
                         }
                     }}
                 >
                     <FlatList 
-                        style={styles.listProducts} // name of style 'listProducts' ?????????????
+                        contentContainerStyle={styles.listProducts} 
                         refreshControl={
                             <RefreshControl
                                 refreshing={useSelector((store) => store.productsReducer.stateProducts.state == StateCode.Processing)}
@@ -84,8 +79,7 @@ const ListProducts = ({ navigation, requestSettings, changePage }) => {
                         data={listProducts}
                         keyExtractor={(item) => item.id}
                         renderItem={({ item }) => {
-                            // console.log('listProducts'+listProducts)
-                            return <ProductCard key={item.id} product={item} navigation={navigation} />
+                            return <ProductCard key={item.id} product={item} navigation={navigation} setLimit={setLimit} />
                         }}
                     />
                     <Text style={styles.pagination}>⸺⸺ {requestSettings.page} ⸺⸺</Text>

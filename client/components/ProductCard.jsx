@@ -1,86 +1,88 @@
+import { useEffect } from 'react';
 import { View, Text, Image, Pressable, StyleSheet, Dimensions } from 'react-native';
 
-const ProductCard = (props) => {
+const ProductCard = ({product, navigation, setLimit}) => {
 
     const {width, height} = Dimensions.get('window')
-    const imgPath = 'http://192.168.8.158:5000/' + props.product.img
-    
+    const imgPath = 'http://192.168.8.158:5000/' + product.img
+
     // огромный кусок стилей посреди кода. кажется это не слишком читаемо ?????????
     const getStyles = () => {
         const styles = {
             productBox: {
+                flex: 1,
                 flexDirection: 'row',
-                borderColor: 'black',
-                borderWidth: 1,
+                width: '97%',
+                alignSelf: 'center',
                 margin: 5,
-                padding: 5
+                borderColor: 'black',
+                borderWidth: 1
             },
             infoBox: {
+                flex: 1,
+                width: '65%',
                 justifyContent: 'space-between',
                 paddingHorizontal: 10
             },
             img: {
-                width: '33%',
-                height: '125px'
+                width: '35%',
+                height: 100,
+                resizeMode: 'contain',
+                backgroundColor: 'white'
             },
             textTitle: {
+                width: '100%',
                 fontSize: 22,
-                fontWeight: 'bold'
+                fontWeight: '700'
             },
             textPrice: {
                 fontSize: 20,
-                fontWeight: 500
+                fontWeight: '600'
             }
         }
 
-        if (width >= 1000) {
-            styles.textTitle = {
-                ...styles.textTitle,
-                fontSize: 37
-            },
-            styles.textPrice = {
-                fontSize: 30,
-                fontWeight: 600
-            }
-        }
-        else if (width >= 700) {
-            styles.textTitle = {
-                ...styles.textTitle,
-                fontSize: 27
-            },
-            styles.textPrice = {
-                fontSize: 22,
-                fontWeight: 600
-            }
+        // на какие промежутки розбить? не слишком ли громоздко???????????????????
+        if (width >= 700) {
+            styles.textTitle.fontSize = 26,
+            styles.textPrice.fontSize = 22,
+            styles.img.height = 180
         }
         else if (width >= 500) {
-            styles.textTitle = {
-                ...styles.textTitle,
-                fontSize: 23
-            },
-            styles.textPrice = {
-                fontSize: 22,
-                fontWeight: 600
-            }
+            styles.textTitle.fontSize = 23,
+            styles.textPrice.fontSize = 20,
+            styles.img.height = 160
         }
-        else styles.textTitle.width = '90%'
+        else if (width >= 390){
+            styles.textTitle.fontSize = 18,
+            styles.textPrice.fontSize = 17
+            styles.img.height = 140
+        }
+        else {
+            styles.textTitle.fontSize = 17,
+            styles.textPrice.fontSize = 15,
+            styles.img.height = 118    
+        }
 
         return StyleSheet.create(styles)
     }
     const styles = getStyles()
 
+    useEffect(() => {
+        setLimit(Math.floor(height/styles.img.height-2))
+    }, [styles.img.height])
+
     return (
         <Pressable
             style={styles.productBox}
-            onPress={() => props.navigation.navigate('Product', {
-                productId: props.product.id,
-                title: props.product.name
+            onPress={() => navigation.navigate('Product', {
+                productId: product.id,
+                title: product.name
             })}
         >
             <Image style={styles.img} source={{ uri: imgPath }} />
             <View style={styles.infoBox}>
-                <Text style={styles.textTitle}>{props.product.name}</Text>
-                <Text style={styles.textPrice}>{props.product.price} zl</Text>
+                <Text style={styles.textTitle}>{product.name}</Text>
+                <Text style={styles.textPrice}>{product.price} zl</Text>
             </View>
         </Pressable>
     );
