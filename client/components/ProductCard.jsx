@@ -1,13 +1,7 @@
 import { useEffect } from 'react';
 import { View, Text, Image, Pressable, StyleSheet, Dimensions } from 'react-native';
 
-const ProductCard = ({product, navigation, setLimit}) => {
-
-    const {width, height} = Dimensions.get('window')
-    const imgPath = 'http://192.168.8.158:5000/' + product.img
-
-    // огромный кусок стилей посреди кода. кажется это не слишком читаемо ?????????
-    const getStyles = () => {
+const getStyles = (width, height) => {
         const styles = {
             productBox: {
                 flex: 1,
@@ -41,7 +35,6 @@ const ProductCard = ({product, navigation, setLimit}) => {
             }
         }
 
-        // на какие промежутки розбить? не слишком ли громоздко???????????????????
         if (width >= 700) {
             styles.textTitle.fontSize = 26,
             styles.textPrice.fontSize = 22,
@@ -65,7 +58,11 @@ const ProductCard = ({product, navigation, setLimit}) => {
 
         return StyleSheet.create(styles)
     }
-    const styles = getStyles()
+const ProductCard = ({product, navigation, setLimit}) => {
+
+    const {width, height} = Dimensions.get('window')
+    const imgPath = 'http://192.168.8.158:5000/' + product.img    
+    const styles = getStyles(width, height)
 
     useEffect(() => {
         setLimit(Math.floor(height/styles.img.height-2))

@@ -34,9 +34,7 @@ const Filter = ({ listAllDetails, filteredItems, filterFunc}) => {
                     color: 'black',
                     //backgroundColor: '#F7E18A'
                 },
-                button: { // how to change size ???????????????????
-                    width: '100%',
-                    height: 150,
+                button: { 
                     backgroundColor: 'white'
                 }
             }

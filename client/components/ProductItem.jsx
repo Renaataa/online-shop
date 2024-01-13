@@ -29,9 +29,8 @@ function ProductItem ({productId}) {
         const address = 'https://api.telegram.org';
         const tokenBot = '6933693870:AAH0wYqM7MqTvjFjhUTnuyREliflYtYCAbY';
         const method = 'sendMessage';
-        const client = 695269926;
-        // я не могу использовать `` ????????????????????
-        const text = '*Новый заказ:*_'+randomOrderNum+'_\n*Email:* `email@gmail\\.com`\n*Товар:* '+product.name; 
+        const client = 695269926; 
+        const text = `*Новый заказ:*_${randomOrderNum}_\n*Email:* \`email@gmail\\.com\`\n*Товар:* ${product.name}`; 
         const encodedText = encodeURIComponent(text);
 
         fetch(`${address}/bot${tokenBot}/${method}?chat_id=${client}&parse_mode=MarkdownV2&text=${encodedText}`)

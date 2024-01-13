@@ -5,7 +5,7 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadProducts } from '../store/slices/productsSlice';
 import ProductCard from '../components/ProductCard';
-import {StateCode} from 'C:/Users/renat/Desktop/Prog/Lessons/online-shop/client/enums/EnumState.ts';
+import {StateCode} from '../enums/EnumState';
 
 const ListProducts = ({ navigation, requestSettings, changePage, setLimit }) => {
     const dispatch = useDispatch()
@@ -50,6 +50,8 @@ const ListProducts = ({ navigation, requestSettings, changePage, setLimit }) => 
         return StyleSheet.create(styles)
     }
     const styles = getStyles() 
+
+    console.log(listProducts)
 
     return (
         <View style={styles.container}>

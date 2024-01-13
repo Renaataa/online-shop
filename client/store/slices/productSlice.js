@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {StateCode} from 'C:/Users/renat/Desktop/Prog/Lessons/online-shop/client/enums/EnumState.ts'; 
+import {StateCode} from '../../enums/EnumState'; 
 
 const defaultState = {
     product: [],

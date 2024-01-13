@@ -1,4 +1,4 @@
-import { View, Dimensions } from 'react-native';
+import { View,Text, Dimensions } from 'react-native';
 import { useState } from 'react';
 import ListProducts from '../components/ListProducts';
 import FilteredProducts from '../components/FilteredProducts';
@@ -16,6 +16,7 @@ export default function ListProductsScreen({ navigation }) {
   
   return (
     <View>
+      {/* <Text>123</Text> */}
       <FilteredProducts
         filterFunc={(listId, property) => {
           const strId = listId.reduce((accumulator, id) => accumulator + `${property}=${id}&`, '&')
