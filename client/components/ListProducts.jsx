@@ -11,16 +11,6 @@ const ListProducts = ({ navigation, requestSettings, changePage, setLimit }) => 
     const dispatch = useDispatch()
     const { width, height } = Dimensions.get('window')
     
-    useEffect(() => {
-        dispatch(loadProducts(requestSettings))
-    }, [requestSettings])
-    
-    // v1
-    let countProducts = useSelector((store) => store.productsReducer.countProducts)
-    let listProducts = useSelector((store) => store.productsReducer.products)
-    // v2 - выдает ошибку внутри предупреждения в браузере и не работает на моб емуляторе
-    //let [countProducts, listProducts] = useSelector((store) => [store.productsReducer.countProducts, store.productsReducer.products])
-    
     async function update() {
         dispatch(loadProducts(requestSettings))
     }

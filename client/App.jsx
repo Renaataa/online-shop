@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
-import { useEffect } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
