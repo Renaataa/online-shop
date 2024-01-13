@@ -70,9 +70,6 @@ const styles = StyleSheet.create({
     modalWindow: {
         width: '95%',
         height: '400',
-        padding: 10,
-        backgroundColor: 'white',
-        borderRadius: 20,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
