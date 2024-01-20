@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Feather } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -11,9 +13,33 @@ import ProfileScreen from './screens/ProfileScreen';
 import ListProductsScreen from './screens/ListProductsScreen';
 import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
+import { authUser, setAuth } from './store/slices/userSlice';
+import { StateCode } from './enums/EnumState';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
+
+const retrieveData = async () => {
+  try {
+    const value = await AsyncStorage.getItem('token')
+    if (value !== null) {
+      console.log(value)
+      return value
+    }
+  } catch (error) {
+    console.log(error, 'do not recieve data from AsyncStorage')
+    return null
+  }
+}
+
+const removeData = async (key) => {
+  try {
+    await AsyncStorage.removeItem(key)
+  } catch (error) {
+    console.log(error, 'cant remove data from AsyncStorage')
+  }
+}
 
 const ScreensProducts = ({ navigation }) => {
 
@@ -47,18 +73,53 @@ const ScreensProducts = ({ navigation }) => {
   )
 }
 
+const Authorization = (props) => {
+  const dispatch = useDispatch()
+  const user = useSelector(store=>store.userReducer)
+  const [checkAuth, setCheckAuth] = useState(false);
+
+  const authorization = async () => {
+    const tokenExist = await retrieveData()
+    if (tokenExist) {
+      dispatch(authUser(tokenExist))  
+    } else {
+      setCheckAuth(true)
+    }
+  }
+
+  useEffect(() => {
+    authorization()
+  },[])
+
+  useEffect(() => {
+    if (user.stateUser.state == StateCode.OK || user.stateUser.state == StateCode.Error) {
+      setCheckAuth(true)
+    }
+  },[user])
+
+
+  if (checkAuth) {
+    return props.children
+  } else {
+    return <></>
+  }
+}
+
 const TabNavigator = () => {
+  
+  
+
   return (
     <Tab.Navigator>
-      <Tab.Screen name="ScreensProducts" component={ScreensProducts} /> 
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+        <Tab.Screen name="ScreensProducts" component={ScreensProducts} /> 
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   )
 }
 
 function App() {
-
+  
   // Создаем состояние auth - true/false
   // Проверять если ли токен у нас в хранилище - если токена нет - ставим auth false
   // Если токен есть - отправляем запрос на его перевыпуск и сохраняем с хранилище новый токен если пришел и авторизовуешь auth true
@@ -66,9 +127,11 @@ function App() {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <TabNavigator />
-      </NavigationContainer>
+      <Authorization>
+        <NavigationContainer>
+          <TabNavigator />
+        </NavigationContainer>
+      </Authorization>  
     </Provider>
   )
 }

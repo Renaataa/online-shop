@@ -46,11 +46,11 @@ const Filter = ({ listAllDetails, filteredItems, filterFunc}) => {
 
         return StyleSheet.create(styles)
     }
-
     const styles = getStyles()
 
     return (
         <View style={styles.container}>
+            {/* фильтр не отображается на андроид емуляторе ?????????????????? */}
             {
                 listAllDetails.length != 0 ?
                     <SectionedMultiSelect

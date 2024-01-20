@@ -18,7 +18,7 @@ const ListProducts = ({ navigation, requestSettings, changePage, setLimit }) => 
     const getStyles = () => {
         const styles = {
             container: {
-                flex: 1,
+                flexGrow: 1,
                 justifyContent: 'flex-start',
                 margin: 20
             },
@@ -28,7 +28,7 @@ const ListProducts = ({ navigation, requestSettings, changePage, setLimit }) => 
                 fontWeight: '500'
             },
             listProducts: {
-                flex: 1,
+                flexGrow: 1,
                 borderWidth: 1
             }
         }
@@ -40,8 +40,6 @@ const ListProducts = ({ navigation, requestSettings, changePage, setLimit }) => 
         return StyleSheet.create(styles)
     }
     const styles = getStyles() 
-
-    console.log(listProducts)
 
     return (
         <View style={styles.container}>

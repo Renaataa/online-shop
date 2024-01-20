@@ -83,9 +83,9 @@ function ProductItem ({productId}) {
         return (
             <Pressable onPress={() => setShowModal(false) }>
                 <View>
-                    <View style={{ flexDirection: 'row', width: '100%'}}>
+                    <View style={{ flexDirection: 'row', width: '100%' }}>
                         <View style={styles.imageBlock}>
-                            <Image source={{uri: `http://192.168.8.158:5000/${product.img}`}} style={styles.img} />  
+                            <Image style={styles.img} source={{ uri: `http://192.168.8.158:5000/${product.img}` }} />
                         </View>
                         <View style={styles.productInfo}>
                             <Text style={styles.productNameTxt}>{product.name}</Text>
@@ -103,7 +103,7 @@ function ProductItem ({productId}) {
                         style={{ ...styles.btn, backgroundColor: "#F7E18A" }}
                         onPress={() => setShowModal(true)}
                     >
-                        <Text style={styles.btnTxt}>Add to cart</Text>
+                        <Text style={styles.btnTxt}>Add to cart</Text>]
                     </Pressable>
                     <Pressable
                         style={styles.btn}
