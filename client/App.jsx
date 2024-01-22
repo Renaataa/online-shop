@@ -8,14 +8,15 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
 import store from './store';
+import { authUser } from './store/slices/userSlice';
+import { StateCode } from './enums/EnumState';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ListProductsScreen from './screens/ListProductsScreen';
 import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
-import { authUser, setAuth } from './store/slices/userSlice';
-import { StateCode } from './enums/EnumState';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoginScreen from './screens/LoginScreen';
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
@@ -33,21 +34,11 @@ const retrieveData = async () => {
   }
 }
 
-const removeData = async (key) => {
-  try {
-    await AsyncStorage.removeItem(key)
-  } catch (error) {
-    console.log(error, 'cant remove data from AsyncStorage')
-  }
-}
-
 const ScreensProducts = ({ navigation }) => {
-
   useEffect(() => {
     if (navigation) {
       navigation.setOptions({
         headerTitle: 'Products',
-        title: 'Products',
         headerRight: () => (
           <Pressable
             style={styles.shopCart}
@@ -73,6 +64,19 @@ const ScreensProducts = ({ navigation }) => {
   )
 }
 
+const ScreensProfile = () => {    
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="Login" component={LoginScreen}/>
+    </Stack.Navigator>
+  )
+}
+
 const Authorization = (props) => {
   const dispatch = useDispatch()
   const user = useSelector(store=>store.userReducer)
@@ -80,7 +84,7 @@ const Authorization = (props) => {
 
   const authorization = async () => {
     const tokenExist = await retrieveData()
-    if (tokenExist) {
+    if (tokenExist) {      
       dispatch(authUser(tokenExist))  
     } else {
       setCheckAuth(true)
@@ -106,14 +110,19 @@ const Authorization = (props) => {
 }
 
 const TabNavigator = () => {
-  
-  
-
   return (
     <Tab.Navigator>
-        <Tab.Screen name="ScreensProducts" component={ScreensProducts} /> 
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen
+        name="ScreensProfile"
+        component={ScreensProfile}
+        options={{title: 'Profile'}}
+      />
+      <Tab.Screen
+        name="ScreensProducts"
+        component={ScreensProducts}
+        options={{ title: 'Products' }}
+      /> 
+      <Tab.Screen name="Home" component={HomeScreen} />
     </Tab.Navigator>
   )
 }

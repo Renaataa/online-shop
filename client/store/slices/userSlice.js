@@ -14,13 +14,19 @@ const defaultState = {
 }
     
 export const authUser = createAsyncThunk('user/authUser', async (token) => {
-    console.log(token, 'TOKKK')
     const resp = await axios.get(`http://192.168.8.158:5000/api/user/auth`, {
         headers: {
             authorization: `Bearer ${token}`
         }
     })
-    console.log(resp)
+    return await resp.data
+})
+
+export const loginUser = createAsyncThunk('user/loginUser', async (data) => {
+    const resp = await axios.post(`http://192.168.8.158:5000/api/user/login`, {
+        email: data.email,
+        password: data.password
+    })
     return await resp.data
 })
 
@@ -28,7 +34,7 @@ const userSlice = createSlice({
     name: 'user',
     initialState: defaultState,
     reducers: {
-        setAuth: (state,action) => {
+        setAuth: (state, action) => {
             state.auth = action.payload
         }
     },
@@ -44,14 +50,34 @@ const userSlice = createSlice({
                 AsyncStorage.setItem('token', action.payload.token) 
             })
             .addCase(authUser.rejected, (state, action) => {
-                console.log('rejected')
-                console.log(action)
                 state.stateUser.state = StateCode.Error
                 state.stateUser.description = 'rejected request to database'
+                state.email = ''
                 state.auth = false
                 AsyncStorage.removeItem('token') 
             })
             .addCase(authUser.pending, (state) => {
+                state.stateUser.state = StateCode.Processing
+                state.stateUser.description = 'request loading'
+            })
+        
+            .addCase(loginUser.fulfilled, (state, action) => {
+                // я привязываюсь к stateUser.state в Арр.jsx ??????????????????????????????????????????????????
+                state.stateUser.state = StateCode.OK
+                state.stateUser.description = 'request successfully completed'
+
+                state.email = action.meta.arg.email
+                state.auth = true
+                AsyncStorage.setItem('token', action.payload.token) 
+            })
+            .addCase(loginUser.rejected, (state, action) => {
+                state.stateUser.state = StateCode.Error
+                state.stateUser.description = 'rejected request to database'
+                state.email = ''
+                state.auth = false
+                AsyncStorage.removeItem('token') 
+            })
+            .addCase(loginUser.pending, (state) => {
                 state.stateUser.state = StateCode.Processing
                 state.stateUser.description = 'request loading'
             })
