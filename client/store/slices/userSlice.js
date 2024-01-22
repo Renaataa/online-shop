@@ -30,6 +30,15 @@ export const loginUser = createAsyncThunk('user/loginUser', async (data) => {
     return await resp.data
 })
 
+export const registrateUser = createAsyncThunk('user/registrateUser', async (data) => {
+    const resp = await axios.post(`http://192.168.8.158:5000/api/user/registration`, {
+        email: data.email,
+        password: data.password,
+        role: 'USER'
+    })
+    return await resp.data
+})
+
 const userSlice = createSlice({
     name: 'user',
     initialState: defaultState,
@@ -78,6 +87,27 @@ const userSlice = createSlice({
                 AsyncStorage.removeItem('token') 
             })
             .addCase(loginUser.pending, (state) => {
+                state.stateUser.state = StateCode.Processing
+                state.stateUser.description = 'request loading'
+            })
+        
+            .addCase(registrateUser.fulfilled, (state, action) => {
+                // я привязываюсь к stateUser.state в Арр.jsx ??????????????????????????????????????????????????
+                state.stateUser.state = StateCode.OK
+                state.stateUser.description = 'request successfully completed'
+
+                state.email = action.meta.arg.email
+                state.auth = true
+                AsyncStorage.setItem('token', action.payload.token) 
+            })
+            .addCase(registrateUser.rejected, (state, action) => {
+                state.stateUser.state = StateCode.Error
+                state.stateUser.description = 'rejected request to database'
+                state.email = ''
+                state.auth = false
+                AsyncStorage.removeItem('token') 
+            })
+            .addCase(registrateUser.pending, (state) => {
                 state.stateUser.state = StateCode.Processing
                 state.stateUser.description = 'request loading'
             })
