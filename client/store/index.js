@@ -6,11 +6,11 @@ import { typeReducer } from "./slices/typeSlice";
 import { userReducer } from "./slices/userSlice";
 
 export default configureStore({
-    reducer: {
-        productsReducer,
-        productReducer,
-        brandReducer, 
-        typeReducer,
-        userReducer
-    } 
+	reducer: {
+		productsReducer,
+		productReducer,
+		brandReducer,
+		typeReducer,
+		userReducer,
+	},
 });
