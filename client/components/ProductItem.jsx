@@ -1,4 +1,4 @@
-import { View, Image, Text, Pressable, StyleSheet } from "react-native";
+import { View, Image, Text, Pressable, StyleSheet, Alert } from "react-native";
 import { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -43,8 +43,21 @@ function ProductItem({ productId }) {
 			`${address}/bot${tokenBot}/${method}?chat_id=${client}&parse_mode=MarkdownV2&text=${encodedText}`
 		)
 			.then((resp) => resp.json())
-			.then((data) => console.log(data))
-			.catch((error) => console.error("Ошибка:", error));
+			.then((data) => {
+				console.log(data);
+				alert(`You ordered ${product.name}`);
+			})
+			.catch((error) => {
+				console.error("Ошибка:", error);
+				alert("Opps... something went wrong");
+			});
+	};
+
+	// work only in mobile version - ok ??????????????????
+	const alert = (message) => {
+		Alert.alert("Your purchase", message, [
+			{ text: "OK", onPress: () => {} },
+		]);
 	};
 
 	const getStyles = () => {
@@ -130,7 +143,7 @@ function ProductItem({ productId }) {
 					>
 						<Text style={styles.btnTxt}>Add to cart</Text>
 					</Pressable>
-					<Pressable style={styles.btn} onPress={checkEmail}>
+					<Pressable style={styles.btn} onPress={buy}>
 						<Text style={styles.btnTxt}>Buy</Text>
 					</Pressable>
 
