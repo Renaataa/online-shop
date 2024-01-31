@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadProducts } from "../store/slices/productsSlice";
 import ProductCard from "../components/ProductCard";
 import { StateCode } from "../enums/EnumState";
+import { AntDesign } from "@expo/vector-icons";
 
 const ListProducts = ({
 	navigation,
@@ -41,6 +42,15 @@ const ListProducts = ({
 
 	const getStyles = () => {
 		const styles = {
+			erorContainer: {
+				alignItems: "center",
+				margin: 50,
+			},
+			erorTxt: {
+				color: "dimgray",
+				fontSize: 18,
+				margin: 20,
+			},
 			container: {
 				flexGrow: 1,
 				justifyContent: "flex-start",
@@ -65,58 +75,80 @@ const ListProducts = ({
 	};
 	const styles = getStyles();
 
-	return (
-		<View style={styles.container}>
-			<GestureHandlerRootView>
-				<Swipeable
-					onSwipeableWillClose={(value) => {
-						switch (value) {
-							case "left":
-								if (requestSettings.page > 1)
-									changePage(requestSettings.page - 1);
-								break;
-							case "right":
-								if (
-									requestSettings.page <
-									countProducts / requestSettings.limit
-								)
-									changePage(requestSettings.page + 1);
-								break;
-						}
-					}}
-				>
-					<FlatList
-						contentContainerStyle={styles.listProducts}
-						refreshControl={
-							<RefreshControl
-								refreshing={useSelector(
-									(store) =>
-										store.productsReducer.stateProducts
-											.state == StateCode.Processing
-								)}
-								onRefresh={update}
-							/>
-						}
-						data={listProducts}
-						keyExtractor={(item) => item.id}
-						renderItem={({ item }) => {
-							return (
-								<ProductCard
-									key={item.id}
-									product={item}
-									navigation={navigation}
-									setLimit={setLimit}
-								/>
-							);
+	// Не работает
+	if (
+		// useSelector((store) => store.productsReducer.stateProducts.state) !=
+		// StateCode.Error
+
+		// useSelector((store) => store.productsReducer.stateProducts.state) ==
+		// StateCode.OK
+
+		//listProducts.length != 0
+
+		1
+	) {
+		return (
+			<View style={styles.container}>
+				<GestureHandlerRootView>
+					<Swipeable
+						onSwipeableWillClose={(value) => {
+							switch (value) {
+								case "left":
+									if (requestSettings.page > 1)
+										changePage(requestSettings.page - 1);
+									break;
+								case "right":
+									if (
+										requestSettings.page <
+										countProducts / requestSettings.limit
+									)
+										changePage(requestSettings.page + 1);
+									break;
+							}
 						}}
-					/>
-					<Text style={styles.pagination}>
-						⸺⸺ {requestSettings.page} ⸺⸺
-					</Text>
-				</Swipeable>
-			</GestureHandlerRootView>
-		</View>
-	);
+					>
+						<FlatList
+							contentContainerStyle={styles.listProducts}
+							refreshControl={
+								<RefreshControl
+									refreshing={useSelector(
+										(store) =>
+											store.productsReducer.stateProducts
+												.state == StateCode.Processing
+									)}
+									onRefresh={update}
+								/>
+							}
+							data={listProducts}
+							keyExtractor={(item) => item.id}
+							renderItem={({ item }) => {
+								return (
+									<ProductCard
+										key={item.id}
+										product={item}
+										navigation={navigation}
+										setLimit={setLimit}
+									/>
+								);
+							}}
+						/>
+						<Text style={styles.pagination}>
+							⸺⸺ {requestSettings.page} ⸺⸺
+						</Text>
+					</Swipeable>
+				</GestureHandlerRootView>
+			</View>
+		);
+	} else {
+		return (
+			<View style={styles.erorContainer}>
+				<Text style={styles.erorTxt}>
+					"Opps... something went wrong"
+				</Text>
+				<AntDesign name="frowno" size={30} color="dimgray" />
+			</View>
+		);
+	}
 };
 
 export default ListProducts;

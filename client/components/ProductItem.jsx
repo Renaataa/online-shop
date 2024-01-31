@@ -7,6 +7,9 @@ import { loadProduct } from "../store/slices/productSlice";
 import ModalAddToCart from "./ModalAddToCart";
 import ModalAskEmail from "./ModalAskEmail";
 import ListProductInfo from "./ListProductInfo";
+import { StateCode } from "../enums/EnumState";
+
+import { AntDesign } from "@expo/vector-icons";
 
 function ProductItem({ productId }) {
 	const dispatch = useDispatch();
@@ -21,10 +24,12 @@ function ProductItem({ productId }) {
 	const user = useSelector((store) => store.userReducer);
 
 	const checkEmail = () => {
+		console.log("here");
 		if (user.auth) {
 			console.log("auth");
 			buy(user.email);
 		} else {
+			console.log("no auth");
 			setShowEmailModal(true);
 		}
 	};
@@ -103,13 +108,25 @@ function ProductItem({ productId }) {
 				fontSize: 20,
 				fontWeight: "600",
 			},
+			erorContainer: {
+				alignItems: "center",
+				margin: 50,
+			},
+			erorTxt: {
+				color: "dimgray",
+				fontSize: 18,
+				margin: 20,
+			},
 		};
 
 		return StyleSheet.create(styles);
 	};
 	const styles = getStyles();
 
-	if (Object.keys(product).length != 0) {
+	if (
+		useSelector((store) => store.productReducer.stateProduct.state) ==
+		StateCode.OK
+	) {
 		return (
 			<Pressable onPress={() => setShowCartModal(false)}>
 				<View>
@@ -143,7 +160,7 @@ function ProductItem({ productId }) {
 					>
 						<Text style={styles.btnTxt}>Add to cart</Text>
 					</Pressable>
-					<Pressable style={styles.btn} onPress={buy}>
+					<Pressable style={styles.btn} onPress={checkEmail}>
 						<Text style={styles.btnTxt}>Buy</Text>
 					</Pressable>
 
@@ -161,7 +178,14 @@ function ProductItem({ productId }) {
 			</Pressable>
 		);
 	} else {
-		return "";
+		return (
+			<View style={styles.erorContainer}>
+				<Text style={styles.erorTxt}>
+					"Opps... something went wrong"
+				</Text>
+				<AntDesign name="frowno" size={30} color="dimgray" />
+			</View>
+		);
 	}
 }
 
