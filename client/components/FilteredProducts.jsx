@@ -13,27 +13,22 @@ const FilteredProducts = ({ filterFunc }) => {
 		dispatch(loadType());
 	}, []);
 
-	let listBrands = useSelector((store) => store.brandReducer.brands);
-	let listTypes = useSelector((store) => store.typeReducer.types);
-
-	let stateBrands = useSelector(
-		(store) => store.brandReducer.stateBrand.state
-	);
-	let stateTypes = useSelector((store) => store.typeReducer.stateType.state);
+	let brandsState = useSelector((store) => store.brandReducer);
+	let typesState = useSelector((store) => store.typeReducer);
 
 	return (
 		<View>
 			<Filter
-				listAllDetails={listBrands}
+				listAllDetails={brandsState.brands}
 				filteredItems={"brand"}
 				filterFunc={filterFunc}
-				requestState={stateBrands}
+				requestState={brandsState.stateBrand.state}
 			/>
 			<Filter
-				listAllDetails={listTypes}
+				listAllDetails={typesState.types}
 				filteredItems={"type"}
 				filterFunc={filterFunc}
-				requestState={stateTypes}
+				requestState={typesState.stateType.state}
 			/>
 		</View>
 	);

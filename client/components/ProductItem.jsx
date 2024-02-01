@@ -20,7 +20,7 @@ function ProductItem({ productId }) {
 		dispatch(loadProduct(productId));
 	}, []);
 
-	const product = useSelector((store) => store.productReducer.product);
+	const productState = useSelector((store) => store.productReducer);
 	const user = useSelector((store) => store.userReducer);
 
 	const checkEmail = () => {
@@ -41,7 +41,7 @@ function ProductItem({ productId }) {
 		const tokenBot = "6933693870:AAH0wYqM7MqTvjFjhUTnuyREliflYtYCAbY";
 		const method = "sendMessage";
 		const client = 695269926;
-		const text = `*Новый заказ:*_${randomOrderNum}_\n*Email:* \`${email}\`\n*Товар:* ${product.name}`;
+		const text = `*Новый заказ:*_${randomOrderNum}_\n*Email:* \`${email}\`\n*Товар:* ${productState.product.name}`;
 		const encodedText = encodeURIComponent(text);
 
 		fetch(
@@ -50,7 +50,7 @@ function ProductItem({ productId }) {
 			.then((resp) => resp.json())
 			.then((data) => {
 				console.log(data);
-				alert(`You ordered ${product.name}`);
+				alert(`You ordered ${productState.product.name}`);
 			})
 			.catch((error) => {
 				console.error("Ошибка:", error);
@@ -58,7 +58,6 @@ function ProductItem({ productId }) {
 			});
 	};
 
-	// work only in mobile version - ok ??????????????????
 	const alert = (message) => {
 		Alert.alert("Your purchase", message, [
 			{ text: "OK", onPress: () => {} },
@@ -123,10 +122,7 @@ function ProductItem({ productId }) {
 	};
 	const styles = getStyles();
 
-	if (
-		useSelector((store) => store.productReducer.stateProduct.state) ==
-		StateCode.OK
-	) {
+	if (productState.stateProduct.state == StateCode.OK) {
 		return (
 			<Pressable onPress={() => setShowCartModal(false)}>
 				<View>
@@ -135,21 +131,23 @@ function ProductItem({ productId }) {
 							<Image
 								style={styles.img}
 								source={{
-									uri: `http://192.168.8.158:5000/${product.img}`,
+									uri: `http://192.168.8.158:5000/${productState.product.img}`,
 								}}
 							/>
 						</View>
 						<View style={styles.productInfo}>
 							<Text style={styles.productNameTxt}>
-								{product.name}
+								{productState.product.name}
 							</Text>
-							{product.info ? (
-								<ListProductInfo info={product.info} />
+							{productState.product.info ? (
+								<ListProductInfo
+									info={productState.product.info}
+								/>
 							) : (
 								<Text></Text>
 							)}
 							<Text style={styles.txtProductPrice}>
-								{product.price} zl
+								{productState.product.price} zl
 							</Text>
 						</View>
 					</View>
@@ -165,7 +163,7 @@ function ProductItem({ productId }) {
 					</Pressable>
 
 					<ModalAddToCart
-						product={product}
+						product={productState.product}
 						changeShowModal={(value) => setShowCartModal(value)}
 						active={showCartModal}
 					/>

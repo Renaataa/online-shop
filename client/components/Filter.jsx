@@ -68,22 +68,18 @@ const Filter = ({
 		return (
 			<View style={styles.container}>
 				{/* фильтр не отображается на андроид емуляторе ?????????????????? */}
-				{listAllDetails.length != 0 ? (
-					<SectionedMultiSelect
-						styles={{ ...styles.SectionedMultiSelect }}
-						items={listNames}
-						IconRenderer={MaterialIcons}
-						uniqueKey="id"
-						selectText={`${filteredItems}s`}
-						selectedText=""
-						showDropDowns={true}
-						showChips={false}
-						onSelectedItemsChange={setSelected}
-						selectedItems={selected}
-					/>
-				) : (
-					<Text></Text>
-				)}
+				<SectionedMultiSelect
+					styles={{ ...styles.SectionedMultiSelect }}
+					items={listNames}
+					IconRenderer={MaterialIcons}
+					uniqueKey="id"
+					selectText={`${filteredItems}s`}
+					selectedText=""
+					showDropDowns={true}
+					showChips={false}
+					onSelectedItemsChange={setSelected}
+					selectedItems={selected}
+				/>
 			</View>
 		);
 	} else {

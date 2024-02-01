@@ -5,7 +5,7 @@ const defaultState = {
 	products: [],
 	countProducts: 0,
 	stateProducts: {
-		state: StateCode[0],
+		state: StateCode.Idle,
 		description: "",
 	},
 };
