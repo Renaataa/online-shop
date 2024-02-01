@@ -1,4 +1,4 @@
-import { View, Image, Text, Pressable, StyleSheet } from "react-native";
+import { View, Image, Text, Pressable, StyleSheet, Alert } from "react-native";
 import { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +7,9 @@ import { loadProduct } from "../store/slices/productSlice";
 import ModalAddToCart from "./ModalAddToCart";
 import ModalAskEmail from "./ModalAskEmail";
 import ListProductInfo from "./ListProductInfo";
+import { StateCode } from "../enums/EnumState";
+
+import { AntDesign } from "@expo/vector-icons";
 
 function ProductItem({ productId }) {
 	const dispatch = useDispatch();
@@ -17,14 +20,16 @@ function ProductItem({ productId }) {
 		dispatch(loadProduct(productId));
 	}, []);
 
-	const product = useSelector((store) => store.productReducer.product);
+	const productState = useSelector((store) => store.productReducer);
 	const user = useSelector((store) => store.userReducer);
 
 	const checkEmail = () => {
+		console.log("here");
 		if (user.auth) {
 			console.log("auth");
 			buy(user.email);
 		} else {
+			console.log("no auth");
 			setShowEmailModal(true);
 		}
 	};
@@ -36,15 +41,27 @@ function ProductItem({ productId }) {
 		const tokenBot = "6933693870:AAH0wYqM7MqTvjFjhUTnuyREliflYtYCAbY";
 		const method = "sendMessage";
 		const client = 695269926;
-		const text = `*Новый заказ:*_${randomOrderNum}_\n*Email:* \`${email}\`\n*Товар:* ${product.name}`;
+		const text = `*Новый заказ:*_${randomOrderNum}_\n*Email:* \`${email}\`\n*Товар:* ${productState.product.name}`;
 		const encodedText = encodeURIComponent(text);
 
 		fetch(
 			`${address}/bot${tokenBot}/${method}?chat_id=${client}&parse_mode=MarkdownV2&text=${encodedText}`
 		)
 			.then((resp) => resp.json())
-			.then((data) => console.log(data))
-			.catch((error) => console.error("Ошибка:", error));
+			.then((data) => {
+				console.log(data);
+				alert(`You ordered ${productState.product.name}`);
+			})
+			.catch((error) => {
+				console.error("Ошибка:", error);
+				alert("Opps... something went wrong");
+			});
+	};
+
+	const alert = (message) => {
+		Alert.alert("Your purchase", message, [
+			{ text: "OK", onPress: () => {} },
+		]);
 	};
 
 	const getStyles = () => {
@@ -90,13 +107,22 @@ function ProductItem({ productId }) {
 				fontSize: 20,
 				fontWeight: "600",
 			},
+			erorContainer: {
+				alignItems: "center",
+				margin: 50,
+			},
+			erorTxt: {
+				color: "dimgray",
+				fontSize: 18,
+				margin: 20,
+			},
 		};
 
 		return StyleSheet.create(styles);
 	};
 	const styles = getStyles();
 
-	if (Object.keys(product).length != 0) {
+	if (productState.stateProduct.state == StateCode.OK) {
 		return (
 			<Pressable onPress={() => setShowCartModal(false)}>
 				<View>
@@ -105,21 +131,23 @@ function ProductItem({ productId }) {
 							<Image
 								style={styles.img}
 								source={{
-									uri: `http://192.168.8.158:5000/${product.img}`,
+									uri: `http://192.168.8.158:5000/${productState.product.img}`,
 								}}
 							/>
 						</View>
 						<View style={styles.productInfo}>
 							<Text style={styles.productNameTxt}>
-								{product.name}
+								{productState.product.name}
 							</Text>
-							{product.info ? (
-								<ListProductInfo info={product.info} />
+							{productState.product.info ? (
+								<ListProductInfo
+									info={productState.product.info}
+								/>
 							) : (
 								<Text></Text>
 							)}
 							<Text style={styles.txtProductPrice}>
-								{product.price} zl
+								{productState.product.price} zl
 							</Text>
 						</View>
 					</View>
@@ -135,7 +163,7 @@ function ProductItem({ productId }) {
 					</Pressable>
 
 					<ModalAddToCart
-						product={product}
+						product={productState.product}
 						changeShowModal={(value) => setShowCartModal(value)}
 						active={showCartModal}
 					/>
@@ -148,7 +176,14 @@ function ProductItem({ productId }) {
 			</Pressable>
 		);
 	} else {
-		return "";
+		return (
+			<View style={styles.erorContainer}>
+				<Text style={styles.erorTxt}>
+					"Opps... something went wrong"
+				</Text>
+				<AntDesign name="frowno" size={30} color="dimgray" />
+			</View>
+		);
 	}
 }
 

@@ -4,11 +4,6 @@ import { logout, resetState } from "../store/slices/userSlice";
 import { useEffect } from "react";
 
 export default function ProfileScreen({ navigation }) {
-	// Проверка из стора авторизован или нет.
-	// Если нет - кнопка - регистрации (при нажатии переводит на регситрацию)
-	// Если авторизованы - пишется наш email
-	// снизу просто продукты корзины
-
 	const dispatch = useDispatch();
 	const user = useSelector((store) => store.userReducer);
 

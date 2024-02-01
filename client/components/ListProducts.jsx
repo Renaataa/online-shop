@@ -6,20 +6,16 @@ import {
 	FlatList,
 	RefreshControl,
 } from "react-native";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { useDispatch, useSelector } from "react-redux";
 import { loadProducts } from "../store/slices/productsSlice";
 import ProductCard from "../components/ProductCard";
 import { StateCode } from "../enums/EnumState";
+import { AntDesign } from "@expo/vector-icons";
 
-const ListProducts = ({
-	navigation,
-	requestSettings,
-	changePage,
-	setLimit,
-}) => {
+const ListProducts = ({ navigation, requestSettings, changePage, imgSize }) => {
 	const dispatch = useDispatch();
 	const { width, height } = Dimensions.get("window");
 
@@ -27,13 +23,7 @@ const ListProducts = ({
 		dispatch(loadProducts(requestSettings));
 	}, [requestSettings]);
 
-	// v1
-	let countProducts = useSelector(
-		(store) => store.productsReducer.countProducts
-	);
-	let listProducts = useSelector((store) => store.productsReducer.products);
-	// v2 - выдает ошибку внутри предупреждения в браузере и не работает на моб емуляторе
-	//let [countProducts, listProducts] = useSelector((store) => [store.productsReducer.countProducts, store.productsReducer.products])
+	const productsState = useSelector((store) => store.productsReducer);
 
 	async function update() {
 		dispatch(loadProducts(requestSettings));
@@ -41,6 +31,15 @@ const ListProducts = ({
 
 	const getStyles = () => {
 		const styles = {
+			erorContainer: {
+				alignItems: "center",
+				margin: 50,
+			},
+			erorTxt: {
+				color: "dimgray",
+				fontSize: 18,
+				margin: 20,
+			},
 			container: {
 				flexGrow: 1,
 				justifyContent: "flex-start",
@@ -65,58 +64,84 @@ const ListProducts = ({
 	};
 	const styles = getStyles();
 
-	return (
-		<View style={styles.container}>
-			<GestureHandlerRootView>
-				<Swipeable
-					onSwipeableWillClose={(value) => {
-						switch (value) {
-							case "left":
-								if (requestSettings.page > 1)
-									changePage(requestSettings.page - 1);
-								break;
-							case "right":
-								if (
-									requestSettings.page <
-									countProducts / requestSettings.limit
-								)
-									changePage(requestSettings.page + 1);
-								break;
-						}
-					}}
-				>
-					<FlatList
-						contentContainerStyle={styles.listProducts}
-						refreshControl={
-							<RefreshControl
-								refreshing={useSelector(
-									(store) =>
-										store.productsReducer.stateProducts
-											.state == StateCode.Processing
-								)}
-								onRefresh={update}
+	if (productsState.stateProducts.state == StateCode.OK) {
+		if (productsState.countProducts > 0) {
+			return (
+				<View style={styles.container}>
+					<GestureHandlerRootView>
+						<Swipeable
+							onSwipeableWillClose={(value) => {
+								switch (value) {
+									case "left":
+										if (requestSettings.page > 1)
+											changePage(
+												requestSettings.page - 1
+											);
+										break;
+									case "right":
+										if (
+											requestSettings.page <
+											productsState.countProducts /
+												requestSettings.limit
+										)
+											changePage(
+												requestSettings.page + 1
+											);
+										break;
+								}
+							}}
+						>
+							<FlatList
+								contentContainerStyle={styles.listProducts}
+								refreshControl={
+									<RefreshControl
+										refreshing={
+											productsState.stateProducts.state ==
+											StateCode.Processing
+										}
+										onRefresh={update}
+									/>
+								}
+								data={productsState.products}
+								keyExtractor={(item) => item.id}
+								renderItem={({ item }) => {
+									return (
+										<ProductCard
+											key={item.id}
+											product={item}
+											navigation={navigation}
+											imgSize={imgSize}
+										/>
+									);
+								}}
 							/>
-						}
-						data={listProducts}
-						keyExtractor={(item) => item.id}
-						renderItem={({ item }) => {
-							return (
-								<ProductCard
-									key={item.id}
-									product={item}
-									navigation={navigation}
-									setLimit={setLimit}
-								/>
-							);
-						}}
-					/>
-					<Text style={styles.pagination}>
-						⸺⸺ {requestSettings.page} ⸺⸺
+							<Text style={styles.pagination}>
+								⸺⸺ {requestSettings.page} ⸺⸺
+							</Text>
+						</Swipeable>
+					</GestureHandlerRootView>
+				</View>
+			);
+		} else {
+			return (
+				<View style={styles.erorContainer}>
+					<Text style={styles.erorTxt}>
+						There are no products within choosed categories.
 					</Text>
-				</Swipeable>
-			</GestureHandlerRootView>
-		</View>
-	);
+					<AntDesign name="frowno" size={30} color="dimgray" />
+				</View>
+			);
+		}
+	} else {
+		return (
+			<View style={styles.erorContainer}>
+				<Text style={styles.erorTxt}>
+					"Opps... something went wrong"
+				</Text>
+				<AntDesign name="frowno" size={30} color="dimgray" />
+			</View>
+		);
+	}
 };
 
 export default ListProducts;

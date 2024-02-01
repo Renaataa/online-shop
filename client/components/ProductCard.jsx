@@ -8,7 +8,7 @@ import {
 	Dimensions,
 } from "react-native";
 
-const getStyles = (width, height) => {
+const getStyles = (imgSize) => {
 	const styles = {
 		productBox: {
 			flex: 1,
@@ -27,7 +27,7 @@ const getStyles = (width, height) => {
 		},
 		img: {
 			width: "35%",
-			height: 100,
+			height: imgSize,
 			resizeMode: "contain",
 			backgroundColor: "white",
 		},
@@ -42,33 +42,13 @@ const getStyles = (width, height) => {
 		},
 	};
 
-	if (width >= 700) {
-		(styles.textTitle.fontSize = 26),
-			(styles.textPrice.fontSize = 22),
-			(styles.img.height = 180);
-	} else if (width >= 500) {
-		(styles.textTitle.fontSize = 23),
-			(styles.textPrice.fontSize = 20),
-			(styles.img.height = 160);
-	} else if (width >= 390) {
-		(styles.textTitle.fontSize = 18), (styles.textPrice.fontSize = 17);
-		styles.img.height = 140;
-	} else {
-		(styles.textTitle.fontSize = 17),
-			(styles.textPrice.fontSize = 15),
-			(styles.img.height = 118);
-	}
-
 	return StyleSheet.create(styles);
 };
-const ProductCard = ({ product, navigation, setLimit }) => {
+
+const ProductCard = ({ product, navigation, imgSize }) => {
 	const { width, height } = Dimensions.get("window");
 	const imgPath = "http://192.168.8.158:5000/" + product.img;
-	const styles = getStyles(width, height);
-
-	useEffect(() => {
-		setLimit(Math.floor(height / styles.img.height - 2));
-	}, [styles.img.height]);
+	const styles = getStyles(imgSize);
 
 	return (
 		<Pressable

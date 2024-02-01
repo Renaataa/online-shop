@@ -2,8 +2,14 @@ import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { useEffect, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import SectionedMultiSelect from "react-native-sectioned-multi-select";
+import { StateCode } from "../enums/EnumState";
 
-const Filter = ({ listAllDetails, filteredItems, filterFunc }) => {
+const Filter = ({
+	listAllDetails,
+	filteredItems,
+	filterFunc,
+	requestState,
+}) => {
 	const [selected, setSelected] = useState([]);
 	const [listNames, setListNames] = useState([]);
 	const { width, height } = Dimensions.get("window");
@@ -39,6 +45,12 @@ const Filter = ({ listAllDetails, filteredItems, filterFunc }) => {
 					backgroundColor: "white",
 				},
 			},
+			erorTxt: {
+				color: "dimgray",
+				fontSize: 17,
+				marginTop: 5,
+				marginLeft: 20,
+			},
 		};
 
 		if (width >= 900)
@@ -52,10 +64,10 @@ const Filter = ({ listAllDetails, filteredItems, filterFunc }) => {
 	};
 	const styles = getStyles();
 
-	return (
-		<View style={styles.container}>
-			{/* фильтр не отображается на андроид емуляторе ?????????????????? */}
-			{listAllDetails.length != 0 ? (
+	if (requestState == StateCode.OK) {
+		return (
+			<View style={styles.container}>
+				{/* фильтр не отображается на андроид емуляторе ?????????????????? */}
 				<SectionedMultiSelect
 					styles={{ ...styles.SectionedMultiSelect }}
 					items={listNames}
@@ -68,11 +80,15 @@ const Filter = ({ listAllDetails, filteredItems, filterFunc }) => {
 					onSelectedItemsChange={setSelected}
 					selectedItems={selected}
 				/>
-			) : (
-				<Text></Text>
-			)}
-		</View>
-	);
+			</View>
+		);
+	} else {
+		return (
+			<Text style={styles.erorTxt}>
+				Filter for {filteredItems}s is not available
+			</Text>
+		);
+	}
 };
 
 export default Filter;
