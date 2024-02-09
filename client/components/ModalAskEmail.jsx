@@ -10,13 +10,13 @@ import { useState } from "react";
 
 const ModalAskEmail = ({ active, changeShowModal, buy }) => {
 	const [email, setEmail] = useState("");
-	const [ifEmail, setIfEmail] = useState(true);
+	const [correctEmail, setCorrectEmail] = useState(true);
 
 	const verifyEmailAndBuy = (email) => {
 		const reg =
 			/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 		if (reg.test(email) === false) {
-			setIfEmail(false);
+			setCorrectEmail(false);
 			return;
 		} else {
 			buy(email);
@@ -46,7 +46,7 @@ const ModalAskEmail = ({ active, changeShowModal, buy }) => {
 								onChangeText={setEmail}
 								value={email}
 							/>
-							{ifEmail ? (
+							{correctEmail ? (
 								<Text></Text>
 							) : (
 								<Text style={styles.txtWarning}>
