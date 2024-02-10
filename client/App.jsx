@@ -49,6 +49,14 @@ const ScreensProducts = ({ navigation }) => {
 				),
 			});
 		}
+
+		const unsubscribe = navigation.addListener("focus", () => {
+			navigation.reset({
+				index: 0,
+				routes: [{ name: "ListProducts" }],
+			});
+		});
+		return unsubscribe;
 	}, [navigation]);
 
 	return (
@@ -64,9 +72,20 @@ const ScreensProducts = ({ navigation }) => {
 	);
 };
 
-const ScreensProfile = () => {
+const ScreensProfile = ({ navigation }) => {
+	useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", () => {
+			navigation.reset({
+				index: 0,
+				routes: [{ name: "Profile" }],
+			});
+		});
+
+		return unsubscribe;
+	}, [navigation]);
+
 	return (
-		<Stack.Navigator>
+		<Stack.Navigator initialRouteName={"Profile"}>
 			<Stack.Screen
 				name="Profile"
 				component={ProfileScreen}
