@@ -1,66 +1,137 @@
-import { Pressable, TextInput, View, Text } from "react-native";
+import { Pressable, TextInput, View, Text, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, setError } from "../store/slices/userSlice";
-import { registrateUser } from "../store/slices/userSlice";
+import { registrateUser, resetState } from "../store/slices/userSlice";
 import { StateCode } from "../enums/EnumState";
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation, route }) => {
+	const { action } = route.params;
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const dispatch = useDispatch();
 	const user = useSelector((store) => store.userReducer);
 
 	useEffect(() => {
+		dispatch(resetState());
+	}, []);
+
+	useEffect(() => {
 		if (user.stateUser.state == StateCode.OK) {
+			dispatch(resetState());
 			navigation.navigate("Profile");
 		}
 	}, [user.stateUser.state]);
 
-	return (
-		<View>
-			<TextInput
-				placeholder="email"
-				onChangeText={setEmail}
-				value={email}
-			/>
-			<TextInput
-				placeholder="password"
-				onChangeText={setPassword}
-				value={password}
-			/>
-			<Pressable
-				onPress={() => {
-					if (email != "" && password != "") {
-						dispatch(
-							loginUser({ email: email, password: password })
-						);
-					} else {
-						dispatch(setError());
-					}
-				}}
-			>
-				{user.stateUser.state != StateCode.Error ? (
-					<Text></Text>
-				) : (
-					<Text>Email or password is wrong</Text>
-				)}
-				<Text>Login</Text>
-			</Pressable>
+	const verifyEmailAndEnter = (email) => {
+		const reg =
+			/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+		if (reg.test(email) === false) {
+			dispatch(setError());
+			return;
+		} else {
+			if (action == "login") {
+				dispatch(
+					loginUser({
+						email: email,
+						password: password,
+					})
+				);
+			} else if (action == "registrate") {
+				dispatch(
+					registrateUser({
+						email: email,
+						password: password,
+					})
+				);
+			}
+		}
+	};
 
-			<Pressable
-				onPress={() => {
-					if (email != "" && password != "") {
-						dispatch(
-							registrateUser({ email: email, password: password })
-						);
-					} else {
-						dispatch(setError());
-					}
-				}}
-			>
-				<Text>Registrate</Text>
-			</Pressable>
+	const getStyles = (action) => {
+		const styles = {
+			mainConteiner: {
+				height: "100%",
+				width: "100%",
+				justifyContent: "center",
+				backgroundColor: "white",
+			},
+			innerConteiner: {
+				height: "22.9%",
+			},
+			txtInput: {
+				width: "60%",
+				alignSelf: "center",
+				fontSize: 16,
+				borderBottomColor: "black",
+				borderBottomWidth: 1,
+			},
+			btn: {
+				height: 40,
+				width: "60%",
+				justifyContent: "center",
+				alignItems: "center",
+				alignSelf: "center",
+				marginTop: 18,
+				paddingVertical: 4,
+				backgroundColor: action == "login" ? "#F7E18A" : "#F99A6B",
+				borderRadius: 20,
+			},
+			btnTxt: {
+				fontWeight: "bold",
+				textAlign: "center",
+			},
+			txtWarning: {
+				alignSelf: "center",
+				color: "red",
+			},
+		};
+		return StyleSheet.create(styles);
+	};
+	const styles = getStyles(action);
+
+	return (
+		<View style={styles.mainConteiner}>
+			<View style={styles.innerConteiner}>
+				<TextInput
+					style={styles.txtInput}
+					placeholder="email"
+					placeholderTextColor="#909090"
+					onChangeText={setEmail}
+					value={email}
+				/>
+				<TextInput
+					style={styles.txtInput}
+					placeholder="password"
+					placeholderTextColor="#909090"
+					onChangeText={setPassword}
+					value={password}
+				/>
+
+				{user.stateUser.state == StateCode.Error ? (
+					<Text style={styles.txtWarning}>
+						Please put correct email address
+					</Text>
+				) : (
+					<Text></Text>
+				)}
+
+				<Pressable
+					style={styles.btn}
+					onPress={() => {
+						if (email != "" && password != "") {
+							verifyEmailAndEnter(email);
+						} else {
+							dispatch(setError());
+						}
+					}}
+				>
+					<Text style={styles.btnTxt}>
+						{action == "login" ? "Login" : "Registrate"}
+						{/* текст двигается ????????????????????????????? */}
+					</Text>
+				</Pressable>
+			</View>
 		</View>
 	);
 };
