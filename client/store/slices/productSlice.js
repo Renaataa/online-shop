@@ -2,10 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { StateCode } from "../../enums/EnumState";
 
 const defaultState = {
-	product: [],
+	product: null,
 	stateProduct: {
 		state: StateCode.Idle,
-		description: "",
+		description: "initial state",
 	},
 };
 
@@ -22,28 +22,14 @@ export const loadProduct = createAsyncThunk(
 const productSlice = createSlice({
 	name: "product",
 	initialState: defaultState,
-	reducers: {
-		//reducer
-	},
+	reducers: {},
 	extraReducers: (build) => {
 		build
-			// addCase - То, что возвращается - является, новым состоянием
 			.addCase(loadProduct.fulfilled, (state, action) => {
-				//console.log(action.payload, 'oneDevice')
 				state.product = action.payload;
 				state.stateProduct.state = StateCode.OK;
 				state.stateProduct.description =
 					"request successfully completed";
-
-				// Пересоздавала память.
-				//state = action.payload.rows
-
-				// Вариант добавления значения в массив
-				//state.push(...action.payload.rows)
-
-				// str, number, bool ... -> return newState
-
-				//return action.payload.rows
 			})
 			.addCase(loadProduct.rejected, (state) => {
 				state.stateProduct.state = StateCode.Error;

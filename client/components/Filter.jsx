@@ -67,7 +67,6 @@ const Filter = ({
 	if (requestState == StateCode.OK) {
 		return (
 			<View style={styles.container}>
-				{/* фильтр не отображается на андроид емуляторе ?????????????????? */}
 				<SectionedMultiSelect
 					styles={{ ...styles.SectionedMultiSelect }}
 					items={listNames}

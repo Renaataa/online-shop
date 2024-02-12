@@ -9,7 +9,7 @@ const defaultState = {
 	email: "",
 	stateUser: {
 		state: StateCode.Idle,
-		description: "",
+		description: "initial state",
 	},
 };
 
@@ -33,15 +33,19 @@ export const loginUser = createAsyncThunk("user/loginUser", async (data) => {
 export const registrateUser = createAsyncThunk(
 	"user/registrateUser",
 	async (data) => {
-		const resp = await axios.post(
-			`http://192.168.8.158:5000/api/user/registration`,
-			{
-				email: data.email,
-				password: data.password,
-				role: "USER",
-			}
+		console.log(
+			await axios.post(
+				`http://192.168.8.158:5000/api/user/registration`,
+				{
+					email: data.email,
+					password: data.password,
+					role: "USER",
+				}
+			)
 		);
-		return await resp.data;
+		console.log(resp);
+		const result = await resp.data;
+		return result;
 	}
 );
 
@@ -62,16 +66,15 @@ const userSlice = createSlice({
 			state.stateUser.description = "";
 		},
 		setError: (state, action) => {
-			console.log("update state");
 			state.stateUser.state = StateCode.Error;
 		},
 	},
 	extraReducers: (build) => {
 		build
-			// addCase - То, что возвращается - является, новым состоянием
 			.addCase(authUser.fulfilled, (state, action) => {
 				state.stateUser.state = StateCode.OK;
 				state.stateUser.description = "request successfully completed";
+
 				const decoded = jwtDecode(action.payload.token);
 				state.email = decoded.email;
 				state.auth = true;
@@ -80,6 +83,7 @@ const userSlice = createSlice({
 			.addCase(authUser.rejected, (state, action) => {
 				state.stateUser.state = StateCode.Error;
 				state.stateUser.description = "rejected request to database";
+
 				state.email = "";
 				state.auth = false;
 				AsyncStorage.removeItem("token");
@@ -100,6 +104,7 @@ const userSlice = createSlice({
 			.addCase(loginUser.rejected, (state, action) => {
 				state.stateUser.state = StateCode.Error;
 				state.stateUser.description = "rejected request to database";
+
 				state.email = "";
 				state.auth = false;
 				AsyncStorage.removeItem("token");
@@ -118,8 +123,10 @@ const userSlice = createSlice({
 				AsyncStorage.setItem("token", action.payload.token);
 			})
 			.addCase(registrateUser.rejected, (state, action) => {
+				console.log(action);
 				state.stateUser.state = StateCode.Error;
 				state.stateUser.description = "rejected request to database";
+
 				state.email = "";
 				state.auth = false;
 				AsyncStorage.removeItem("token");

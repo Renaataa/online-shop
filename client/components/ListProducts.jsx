@@ -126,7 +126,7 @@ const ListProducts = ({ navigation, requestSettings, changePage, imgSize }) => {
 			return (
 				<View style={styles.erorContainer}>
 					<Text style={styles.erorTxt}>
-						There are no products within choosed categories.
+						There are no products within choosed categories
 					</Text>
 					<AntDesign name="frowno" size={30} color="dimgray" />
 				</View>

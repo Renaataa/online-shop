@@ -17,27 +17,13 @@ export const loadBrand = createAsyncThunk("brand/loadBrand", async () => {
 const brandSlice = createSlice({
 	name: "brand",
 	initialState: defaultState,
-	reducers: {
-		//reducer
-	},
+	reducers: {},
 	extraReducers: (build) => {
 		build
-			// addCase - То, что возвращается - является, новым состоянием
 			.addCase(loadBrand.fulfilled, (state, action) => {
-				//console.log(action.payload, 'oneDevice')
 				state.brands = action.payload;
 				state.stateBrand.state = StateCode.OK;
 				state.stateBrand.description = "request successfully completed";
-
-				// Пересоздавала память.
-				//state = action.payload.rows
-
-				// Вариант добавления значения в массив
-				//state.push(...action.payload.rows)
-
-				// str, number, bool ... -> return newState
-
-				//return action.payload.rows
 			})
 			.addCase(loadBrand.rejected, (state) => {
 				state.stateBrand.state = StateCode.Error;

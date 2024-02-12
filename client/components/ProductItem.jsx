@@ -24,12 +24,9 @@ function ProductItem({ productId }) {
 	const user = useSelector((store) => store.userReducer);
 
 	const checkEmail = () => {
-		console.log("here");
 		if (user.auth) {
-			console.log("auth");
 			buy(user.email);
 		} else {
-			console.log("no auth");
 			setShowEmailModal(true);
 		}
 	};
@@ -122,7 +119,10 @@ function ProductItem({ productId }) {
 	};
 	const styles = getStyles();
 
-	if (productState.stateProduct.state == StateCode.OK) {
+	if (
+		productState.stateProduct.state === StateCode.OK &&
+		productState.product != null
+	) {
 		return (
 			<Pressable onPress={() => setShowCartModal(false)}>
 				<View>

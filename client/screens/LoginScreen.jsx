@@ -110,7 +110,7 @@ const LoginScreen = ({ navigation, route }) => {
 
 				{user.stateUser.state == StateCode.Error ? (
 					<Text style={styles.txtWarning}>
-						Please put correct email address
+						Incorrect email address or password
 					</Text>
 				) : (
 					<Text></Text>
@@ -128,7 +128,6 @@ const LoginScreen = ({ navigation, route }) => {
 				>
 					<Text style={styles.btnTxt}>
 						{action == "login" ? "Login" : "Registrate"}
-						{/* текст двигается ????????????????????????????? */}
 					</Text>
 				</Pressable>
 			</View>
