@@ -14,6 +14,10 @@ const LoginScreen = ({ navigation, route }) => {
 
 	useEffect(() => {
 		dispatch(resetState());
+		navigation.setOptions({
+			title:
+				action.charAt(0).toUpperCase() + action.substr(1).toLowerCase(),
+		});
 	}, []);
 
 	useEffect(() => {
