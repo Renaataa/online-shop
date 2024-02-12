@@ -120,8 +120,8 @@ function ProductItem({ productId }) {
 	const styles = getStyles();
 
 	if (
-		productState.stateProduct.state === StateCode.OK &&
-		productState.product != null
+		productState.stateProduct.state == StateCode.OK &&
+		Object.keys(productState.product).length != 0
 	) {
 		return (
 			<Pressable onPress={() => setShowCartModal(false)}>

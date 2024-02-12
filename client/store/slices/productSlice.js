@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { StateCode } from "../../enums/EnumState";
 
 const defaultState = {
-	product: null,
+	product: {},
 	stateProduct: {
 		state: StateCode.Idle,
 		description: "initial state",
@@ -26,7 +26,7 @@ const productSlice = createSlice({
 	extraReducers: (build) => {
 		build
 			.addCase(loadProduct.fulfilled, (state, action) => {
-				state.product = action.payload;
+				state.product = action.payload ? action.payload : {};
 				state.stateProduct.state = StateCode.OK;
 				state.stateProduct.description =
 					"request successfully completed";
