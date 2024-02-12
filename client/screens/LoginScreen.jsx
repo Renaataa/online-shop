@@ -1,8 +1,12 @@
 import { Pressable, TextInput, View, Text, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, setError } from "../store/slices/userSlice";
-import { registrateUser, resetState } from "../store/slices/userSlice";
+import {
+	loginUser,
+	registrateUser,
+	setError,
+	resetState,
+} from "../store/slices/userSlice";
 import { StateCode } from "../enums/EnumState";
 
 const LoginScreen = ({ navigation, route }) => {
@@ -31,7 +35,7 @@ const LoginScreen = ({ navigation, route }) => {
 		const reg =
 			/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 		if (reg.test(email) === false) {
-			dispatch(setError());
+			dispatch(setError("Email format is incorrect"));
 			return;
 		} else {
 			if (action == "login") {
@@ -114,7 +118,7 @@ const LoginScreen = ({ navigation, route }) => {
 
 				{user.stateUser.state == StateCode.Error ? (
 					<Text style={styles.txtWarning}>
-						Incorrect email address or password
+						{user.stateUser.description}
 					</Text>
 				) : (
 					<Text></Text>
@@ -126,12 +130,13 @@ const LoginScreen = ({ navigation, route }) => {
 						if (email != "" && password != "") {
 							verifyEmailAndEnter(email);
 						} else {
-							dispatch(setError());
+							dispatch(setError("Please fill in both fields"));
 						}
 					}}
 				>
 					<Text style={styles.btnTxt}>
-						{action == "login" ? "Login" : "Registrate"}
+						{action.charAt(0).toUpperCase() +
+							action.substr(1).toLowerCase()}
 					</Text>
 				</Pressable>
 			</View>

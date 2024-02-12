@@ -67,6 +67,7 @@ const userSlice = createSlice({
 		},
 		setError: (state, action) => {
 			state.stateUser.state = StateCode.Error;
+			state.stateUser.description = action.payload;
 		},
 	},
 	extraReducers: (build) => {
