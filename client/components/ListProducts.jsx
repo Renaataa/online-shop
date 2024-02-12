@@ -6,7 +6,7 @@ import {
 	FlatList,
 	RefreshControl,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useCallback } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,13 +23,15 @@ const ListProducts = ({ navigation, requestSettings, changePage, imgSize }) => {
 		dispatch(loadProducts(requestSettings));
 	}, [requestSettings]);
 
+	// useCallback ????????????????????????
 	const productsState = useSelector((store) => store.productsReducer);
 
+	// useCallback ????????????????????????
 	async function update() {
 		dispatch(loadProducts(requestSettings));
 	}
 
-	const getStyles = () => {
+	const getStyles = useCallback(() => {
 		const styles = {
 			erorContainer: {
 				alignItems: "center",
@@ -61,7 +63,8 @@ const ListProducts = ({ navigation, requestSettings, changePage, imgSize }) => {
 		else if (width >= 500) styles.pagination.fontSize = 18;
 
 		return StyleSheet.create(styles);
-	};
+	}, [width]);
+
 	const styles = getStyles();
 
 	if (productsState.stateProducts.state == StateCode.OK) {

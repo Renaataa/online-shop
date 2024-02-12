@@ -1,5 +1,5 @@
 import { View, Dimensions } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import ListProducts from "../components/ListProducts";
 import FilteredProducts from "../components/FilteredProducts";
 
@@ -46,34 +46,41 @@ export default function ListProductsScreen({ navigation }) {
 			setRequestSettings({ ...requestSettings, limit: newLimit });
 	}, [newLimit]);
 
+	const filterFunc = useCallback(
+		(listId, property) => {
+			const strId = listId.reduce(
+				(accumulator, id) => accumulator + `${property}=${id}&`,
+				"&"
+			);
+			setRequestSettings({
+				...requestSettings,
+				page: 1,
+				[property]: strId,
+			});
+		},
+		[requestSettings]
+	);
+
+	const changePage = useCallback(
+		(newPage) => {
+			setRequestSettings({
+				...requestSettings,
+				page: newPage,
+			});
+		},
+		[requestSettings]
+	);
+
 	if (poductImgSize === null || newLimit === null) {
 		return <View />;
 	} else {
 		return (
 			<View>
-				<FilteredProducts
-					filterFunc={(listId, property) => {
-						const strId = listId.reduce(
-							(accumulator, id) =>
-								accumulator + `${property}=${id}&`,
-							"&"
-						);
-						setRequestSettings({
-							...requestSettings,
-							page: 1,
-							[property]: strId,
-						});
-					}}
-				/>
+				<FilteredProducts filterFunc={filterFunc} />
 				<ListProducts
 					navigation={navigation}
 					requestSettings={requestSettings}
-					changePage={(newPage) =>
-						setRequestSettings({
-							...requestSettings,
-							page: newPage,
-						})
-					}
+					changePage={changePage}
 					imgSize={poductImgSize}
 				/>
 			</View>

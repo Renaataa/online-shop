@@ -1,6 +1,73 @@
 import { View, StyleSheet, Image, Text, Pressable, Modal } from "react-native";
+import { useCallback } from "react";
 
 const ModalAddToCart = ({ active, product, changeShowModal }) => {
+	const getStyles = useCallback(() => {
+		const styles = {
+			modalBackground: {
+				flexGrow: 1,
+				justifyContent: "center",
+				backgroundColor: "rgba(52, 52, 52, 0.8)",
+			},
+			modalWindow: {
+				width: "90%",
+				justifyContent: "space-between",
+				alignSelf: "center",
+				padding: 15,
+				aspectRatio: 1,
+				backgroundColor: "white",
+				borderRadius: 20,
+			},
+			txtHead: {
+				fontSize: 21,
+				fontWeight: "bold",
+			},
+			productContainer: {
+				flexDirection: "row",
+				justifyContent: "space-between",
+			},
+			productInfoContainer: {
+				width: "60%",
+				marginTop: 25,
+				marginLeft: 15,
+			},
+			img: {
+				width: "35%",
+				height: 250,
+			},
+			txtProductName: {
+				fontSize: 19,
+				fontWeight: "bold",
+			},
+			txtProductPrice: {
+				fontSize: 15,
+				fontWeight: "600",
+			},
+			btnModalBox: {
+				flexDirection: "row",
+				justifyContent: "space-between",
+			},
+			btnModal: {
+				alignItems: "center",
+				justifyContent: "center",
+				width: "49%",
+				height: 40,
+				backgroundColor: "#F99A6B",
+				borderRadius: 20,
+			},
+			btnTxt: {
+				fontWeight: "600",
+				fontSize: 15,
+				textAlign: "center",
+				paddingBottom: 4,
+			},
+		};
+
+		return StyleSheet.create(styles);
+	}, []);
+
+	const styles = getStyles();
+
 	if (active) {
 		return (
 			<Modal transparent={true} visible={true}>
@@ -58,65 +125,5 @@ const ModalAddToCart = ({ active, product, changeShowModal }) => {
 		return "";
 	}
 };
-
-const styles = StyleSheet.create({
-	modalBackground: {
-		flexGrow: 1,
-		justifyContent: "center",
-		backgroundColor: "rgba(52, 52, 52, 0.8)",
-	},
-	modalWindow: {
-		width: "90%",
-		justifyContent: "space-between",
-		alignSelf: "center",
-		padding: 15,
-		aspectRatio: 1,
-		backgroundColor: "white",
-		borderRadius: 20,
-	},
-	txtHead: {
-		fontSize: 21,
-		fontWeight: "bold",
-	},
-	productContainer: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-	},
-	productInfoContainer: {
-		width: "60%",
-		marginTop: 25,
-		marginLeft: 15,
-	},
-	img: {
-		width: "35%",
-		height: 250,
-	},
-	txtProductName: {
-		fontSize: 19,
-		fontWeight: "bold",
-	},
-	txtProductPrice: {
-		fontSize: 15,
-		fontWeight: "600",
-	},
-	btnModalBox: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-	},
-	btnModal: {
-		alignItems: "center",
-		justifyContent: "center",
-		width: "49%",
-		height: 40,
-		backgroundColor: "#F99A6B",
-		borderRadius: 20,
-	},
-	btnTxt: {
-		fontWeight: "600",
-		fontSize: 15,
-		textAlign: "center",
-		paddingBottom: 4,
-	},
-});
 
 export default ModalAddToCart;

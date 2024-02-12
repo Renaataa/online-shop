@@ -1,5 +1,5 @@
 import { View, Image, Text, Pressable, StyleSheet, Alert } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { loadProduct } from "../store/slices/productSlice";
@@ -23,45 +23,49 @@ function ProductItem({ productId }) {
 	const productState = useSelector((store) => store.productReducer);
 	const user = useSelector((store) => store.userReducer);
 
-	const checkEmail = () => {
+	const checkEmail = useCallback(() => {
+		console.log("check");
 		if (user.auth) {
 			buy(user.email);
 		} else {
 			setShowEmailModal(true);
 		}
-	};
+	}, [user]);
 
-	const buy = (email) => {
-		const randomOrderNum = Math.floor(Math.random() * 1000) + 1000;
+	const buy = useCallback(
+		(email) => {
+			const randomOrderNum = Math.floor(Math.random() * 1000) + 1000;
 
-		const address = "https://api.telegram.org";
-		const tokenBot = "6933693870:AAH0wYqM7MqTvjFjhUTnuyREliflYtYCAbY";
-		const method = "sendMessage";
-		const client = 695269926;
-		const text = `*Новый заказ:*_${randomOrderNum}_\n*Email:* \`${email}\`\n*Товар:* ${productState.product.name}`;
-		const encodedText = encodeURIComponent(text);
+			const address = "https://api.telegram.org";
+			const tokenBot = "6933693870:AAH0wYqM7MqTvjFjhUTnuyREliflYtYCAbY";
+			const method = "sendMessage";
+			const client = 695269926;
+			const text = `*Новый заказ:*_${randomOrderNum}_\n*Email:* \`${email}\`\n*Товар:* ${productState.product.name}`;
+			const encodedText = encodeURIComponent(text);
 
-		fetch(
-			`${address}/bot${tokenBot}/${method}?chat_id=${client}&parse_mode=MarkdownV2&text=${encodedText}`
-		)
-			.then((resp) => resp.json())
-			.then((data) => {
-				console.log(data);
-				alert(`You ordered ${productState.product.name}`);
-			})
-			.catch((error) => {
-				console.error("Ошибка:", error);
-				alert("Opps... something went wrong");
-			});
-	};
+			fetch(
+				`${address}/bot${tokenBot}/${method}?chat_id=${client}&parse_mode=MarkdownV2&text=${encodedText}`
+			)
+				.then((resp) => resp.json())
+				.then((data) => {
+					console.log(data);
+					alert(`You ordered ${productState.product.name}`);
+				})
+				.catch((error) => {
+					console.error("Ошибка:", error);
+					alert("Opps... something went wrong");
+				});
+		},
+		[productState]
+	);
 
-	const alert = (message) => {
+	const alert = useCallback((message) => {
 		Alert.alert("Your purchase", message, [
 			{ text: "OK", onPress: () => {} },
 		]);
-	};
+	}, []);
 
-	const getStyles = () => {
+	const getStyles = useCallback(() => {
 		const styles = {
 			productContainer: {
 				flexDirection: "row",
@@ -116,7 +120,8 @@ function ProductItem({ productId }) {
 		};
 
 		return StyleSheet.create(styles);
-	};
+	}, []);
+
 	const styles = getStyles();
 
 	if (

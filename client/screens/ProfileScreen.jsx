@@ -1,7 +1,7 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, resetState } from "../store/slices/userSlice";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { Fontisto } from "@expo/vector-icons";
 
 export default function ProfileScreen({ navigation }) {
@@ -12,7 +12,7 @@ export default function ProfileScreen({ navigation }) {
 		dispatch(resetState());
 	}, []);
 
-	const getStyles = () => {
+	const getStyles = useCallback(() => {
 		const styles = {
 			conteiner: {
 				height: "100%",
@@ -52,8 +52,10 @@ export default function ProfileScreen({ navigation }) {
 				height: "15%",
 			},
 		};
+
 		return StyleSheet.create(styles);
-	};
+	}, []);
+
 	const styles = getStyles();
 
 	return (

@@ -1,5 +1,5 @@
 import { Pressable, TextInput, View, Text, StyleSheet } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	loginUser,
@@ -31,32 +31,36 @@ const LoginScreen = ({ navigation, route }) => {
 		}
 	}, [user.stateUser.state]);
 
-	const verifyEmailAndEnter = (email) => {
-		const reg =
-			/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-		if (reg.test(email) === false) {
-			dispatch(setError("Email format is incorrect"));
-			return;
-		} else {
-			if (action == "login") {
-				dispatch(
-					loginUser({
-						email: email,
-						password: password,
-					})
-				);
-			} else if (action == "registrate") {
-				dispatch(
-					registrateUser({
-						email: email,
-						password: password,
-					})
-				);
-			}
-		}
-	};
+	const verifyEmailAndEnter = useCallback(
+		(email) => {
+			const reg =
+				/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
-	const getStyles = (action) => {
+			if (reg.test(email) === false) {
+				dispatch(setError("Email format is incorrect"));
+				return;
+			} else {
+				if (action == "login") {
+					dispatch(
+						loginUser({
+							email: email,
+							password: password,
+						})
+					);
+				} else if (action == "registrate") {
+					dispatch(
+						registrateUser({
+							email: email,
+							password: password,
+						})
+					);
+				}
+			}
+		},
+		[dispatch, action, password]
+	);
+
+	const getStyles = useCallback((action) => {
 		const styles = {
 			mainConteiner: {
 				height: "100%",
@@ -94,8 +98,10 @@ const LoginScreen = ({ navigation, route }) => {
 				color: "red",
 			},
 		};
+
 		return StyleSheet.create(styles);
-	};
+	}, []);
+
 	const styles = getStyles(action);
 
 	return (

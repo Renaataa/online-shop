@@ -6,15 +6,16 @@ import {
 	Modal,
 	TextInput,
 } from "react-native";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 const ModalAskEmail = ({ active, changeShowModal, buy }) => {
 	const [email, setEmail] = useState("");
 	const [correctEmail, setCorrectEmail] = useState(true);
 
-	const verifyEmailAndBuy = (email) => {
+	const verifyEmailAndBuy = useCallback((email) => {
 		const reg =
 			/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+
 		if (reg.test(email) === false) {
 			setCorrectEmail(false);
 			return;
@@ -22,7 +23,7 @@ const ModalAskEmail = ({ active, changeShowModal, buy }) => {
 			buy(email);
 			changeShowModal(false);
 		}
-	};
+	}, []);
 
 	if (active) {
 		return (

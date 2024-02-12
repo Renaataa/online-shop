@@ -33,19 +33,12 @@ export const loginUser = createAsyncThunk("user/loginUser", async (data) => {
 export const registrateUser = createAsyncThunk(
 	"user/registrateUser",
 	async (data) => {
-		console.log(
-			await axios.post(
-				`http://192.168.8.158:5000/api/user/registration`,
-				{
-					email: data.email,
-					password: data.password,
-					role: "USER",
-				}
-			)
-		);
-		console.log(resp);
-		const result = await resp.data;
-		return result;
+		await axios.post(`http://192.168.8.158:5000/api/user/registration`, {
+			email: data.email,
+			password: data.password,
+			role: "USER",
+		});
+		return await resp.data;
 	}
 );
 

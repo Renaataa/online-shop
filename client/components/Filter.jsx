@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Dimensions } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import SectionedMultiSelect from "react-native-sectioned-multi-select";
 import { StateCode } from "../enums/EnumState";
@@ -26,7 +26,7 @@ const Filter = ({
 		filterFunc(selected, `${filteredItems}Id`);
 	}, [selected]);
 
-	const getStyles = () => {
+	const getStyles = useCallback(() => {
 		const styles = {
 			container: {
 				height: 40,
@@ -39,7 +39,6 @@ const Filter = ({
 				},
 				confirmText: {
 					color: "black",
-					//backgroundColor: '#F7E18A'
 				},
 				button: {
 					backgroundColor: "white",
@@ -61,7 +60,8 @@ const Filter = ({
 			styles.SectionedMultiSelect.selectToggleText.fontSize = 18;
 
 		return StyleSheet.create(styles);
-	};
+	}, [width]);
+
 	const styles = getStyles();
 
 	if (requestState == StateCode.OK) {

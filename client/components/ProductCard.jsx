@@ -1,53 +1,46 @@
-import { useEffect } from "react";
-import {
-	View,
-	Text,
-	Image,
-	Pressable,
-	StyleSheet,
-	Dimensions,
-} from "react-native";
-
-const getStyles = (imgSize) => {
-	const styles = {
-		productBox: {
-			flex: 1,
-			flexDirection: "row",
-			width: "97%",
-			alignSelf: "center",
-			margin: 5,
-			borderColor: "black",
-			borderWidth: 1,
-		},
-		infoBox: {
-			flex: 1,
-			width: "65%",
-			justifyContent: "space-between",
-			paddingHorizontal: 10,
-		},
-		img: {
-			width: "35%",
-			height: imgSize,
-			resizeMode: "contain",
-			backgroundColor: "white",
-		},
-		textTitle: {
-			width: "100%",
-			fontSize: 22,
-			fontWeight: "700",
-		},
-		textPrice: {
-			fontSize: 20,
-			fontWeight: "600",
-		},
-	};
-
-	return StyleSheet.create(styles);
-};
+import { View, Text, Image, Pressable, StyleSheet } from "react-native";
+import { useCallback } from "react";
 
 const ProductCard = ({ product, navigation, imgSize }) => {
-	const { width, height } = Dimensions.get("window");
 	const imgPath = "http://192.168.8.158:5000/" + product.img;
+
+	const getStyles = useCallback((imgSize) => {
+		const styles = {
+			productBox: {
+				flex: 1,
+				flexDirection: "row",
+				width: "97%",
+				alignSelf: "center",
+				margin: 5,
+				borderColor: "black",
+				borderWidth: 1,
+			},
+			infoBox: {
+				flex: 1,
+				width: "65%",
+				justifyContent: "space-between",
+				paddingHorizontal: 10,
+			},
+			img: {
+				width: "35%",
+				height: imgSize,
+				resizeMode: "contain",
+				backgroundColor: "white",
+			},
+			textTitle: {
+				width: "100%",
+				fontSize: 22,
+				fontWeight: "700",
+			},
+			textPrice: {
+				fontSize: 20,
+				fontWeight: "600",
+			},
+		};
+
+		return StyleSheet.create(styles);
+	}, []);
+
 	const styles = getStyles(imgSize);
 
 	return (
