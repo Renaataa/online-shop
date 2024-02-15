@@ -6,7 +6,7 @@ const defaultState = {
 	countProducts: 0,
 	stateProducts: {
 		state: StateCode.Idle,
-		description: "",
+		description: "initial state",
 	},
 };
 
@@ -23,28 +23,15 @@ export const loadProducts = createAsyncThunk(
 const productsSlice = createSlice({
 	name: "products",
 	initialState: defaultState,
-	reducers: {
-		//reducer
-	},
+	reducers: {},
 	extraReducers: (build) => {
 		build
-			// addCase - То, что возвращается - является, новым состоянием
 			.addCase(loadProducts.fulfilled, (state, action) => {
-				//console.log(action.payload.rows, 'data')
 				state.products = action.payload.rows;
 				state.countProducts = action.payload.count;
 				state.stateProducts.state = StateCode.OK;
 				state.stateProducts.description =
 					"request successfully completed";
-
-				// Пересоздавала память
-				//state = action.payload.rows
-
-				// Вариант добавления значения в массив
-				//state.push(...action.payload.rows)
-
-				// str, number, bool ... -> return newState
-				//return action.payload.rows
 			})
 			.addCase(loadProducts.rejected, (state) => {
 				state.stateProducts.state = StateCode.Error;

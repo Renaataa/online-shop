@@ -17,7 +17,7 @@ const FilteredProducts = ({ filterFunc }) => {
 	let typesState = useSelector((store) => store.typeReducer);
 
 	return (
-		<View>
+		<>
 			<Filter
 				listAllDetails={brandsState.brands}
 				filteredItems={"brand"}
@@ -30,7 +30,7 @@ const FilteredProducts = ({ filterFunc }) => {
 				filterFunc={filterFunc}
 				requestState={typesState.stateType.state}
 			/>
-		</View>
+		</>
 	);
 };
 

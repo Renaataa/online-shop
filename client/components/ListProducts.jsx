@@ -6,7 +6,7 @@ import {
 	FlatList,
 	RefreshControl,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useCallback } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,20 +25,21 @@ const ListProducts = ({ navigation, requestSettings, changePage, imgSize }) => {
 
 	const productsState = useSelector((store) => store.productsReducer);
 
-	async function update() {
+	const update = useCallback(async () => {
 		dispatch(loadProducts(requestSettings));
-	}
+	}, [requestSettings]);
 
-	const getStyles = () => {
+	const getStyles = useCallback(() => {
 		const styles = {
 			erorContainer: {
 				alignItems: "center",
-				margin: 50,
+				marginVertical: 50,
 			},
 			erorTxt: {
+				textAlign: "center",
+				marginBottom: 20,
+				fontSize: 17,
 				color: "dimgray",
-				fontSize: 18,
-				margin: 20,
 			},
 			container: {
 				flexGrow: 1,
@@ -61,7 +62,8 @@ const ListProducts = ({ navigation, requestSettings, changePage, imgSize }) => {
 		else if (width >= 500) styles.pagination.fontSize = 18;
 
 		return StyleSheet.create(styles);
-	};
+	}, [width]);
+
 	const styles = getStyles();
 
 	if (productsState.stateProducts.state == StateCode.OK) {
@@ -126,19 +128,25 @@ const ListProducts = ({ navigation, requestSettings, changePage, imgSize }) => {
 			return (
 				<View style={styles.erorContainer}>
 					<Text style={styles.erorTxt}>
-						There are no products within choosed categories.
+						There are no products within choosed categories
 					</Text>
 					<AntDesign name="frowno" size={30} color="dimgray" />
 				</View>
 			);
 		}
-	} else {
+	} else if (productsState.stateProducts.state == StateCode.Error) {
 		return (
 			<View style={styles.erorContainer}>
 				<Text style={styles.erorTxt}>
 					"Opps... something went wrong"
 				</Text>
 				<AntDesign name="frowno" size={30} color="dimgray" />
+			</View>
+		);
+	} else {
+		return (
+			<View style={styles.erorContainer}>
+				<Text style={styles.erorTxt}>Products loading...</Text>
 			</View>
 		);
 	}

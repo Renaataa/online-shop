@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Pressable, StyleSheet } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Feather } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Provider } from "react-redux";
 import store from "./store";
-import { authUser, resetState } from "./store/slices/userSlice";
+import { authUser } from "./store/slices/userSlice";
 import { StateCode } from "./enums/EnumState";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomeScreen from "./screens/HomeScreen";
@@ -101,14 +101,14 @@ const Authorization = (props) => {
 	const user = useSelector((store) => store.userReducer);
 	const [checkAuth, setCheckAuth] = useState(false);
 
-	const authorization = async () => {
+	const authorization = useCallback(async () => {
 		const tokenExist = await retrieveData();
 		if (tokenExist) {
 			dispatch(authUser(tokenExist));
 		} else {
 			setCheckAuth(true);
 		}
-	};
+	}, []);
 
 	useEffect(() => {
 		authorization();
