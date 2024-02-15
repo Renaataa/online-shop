@@ -29,8 +29,7 @@ const Filter = ({
 	const getStyles = useCallback(() => {
 		const styles = {
 			container: {
-				height: 40,
-				width: 150,
+				width: 160,
 				marginLeft: 10,
 			},
 			SectionedMultiSelect: {
@@ -74,19 +73,21 @@ const Filter = ({
 					uniqueKey="id"
 					selectText={`${filteredItems}s`}
 					selectedText=""
-					showDropDowns={true}
+					showDropDowns={false}
 					showChips={false}
 					onSelectedItemsChange={setSelected}
 					selectedItems={selected}
 				/>
 			</View>
 		);
-	} else {
+	} else if (requestState == StateCode.Error) {
 		return (
 			<Text style={styles.erorTxt}>
 				Filter for {filteredItems}s is not available
 			</Text>
 		);
+	} else {
+		return <Text style={styles.erorTxt}>Filter loading...</Text>;
 	}
 };
 

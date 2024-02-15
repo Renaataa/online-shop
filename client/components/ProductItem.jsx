@@ -110,12 +110,13 @@ function ProductItem({ productId }) {
 			},
 			erorContainer: {
 				alignItems: "center",
-				margin: 50,
+				marginVertical: 50,
 			},
 			erorTxt: {
+				textAlign: "center",
+				marginBottom: 20,
+				fontSize: 17,
 				color: "dimgray",
-				fontSize: 18,
-				margin: 20,
 			},
 		};
 
@@ -180,13 +181,22 @@ function ProductItem({ productId }) {
 				</View>
 			</Pressable>
 		);
-	} else {
+	} else if (
+		productState.stateProduct.state == StateCode.Error ||
+		Object.keys(productState.product).length == 0
+	) {
 		return (
 			<View style={styles.erorContainer}>
 				<Text style={styles.erorTxt}>
 					"Opps... something went wrong"
 				</Text>
 				<AntDesign name="frowno" size={30} color="dimgray" />
+			</View>
+		);
+	} else {
+		return (
+			<View style={styles.erorContainer}>
+				<Text style={styles.erorTxt}>Product loading...</Text>
 			</View>
 		);
 	}

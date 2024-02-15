@@ -27,7 +27,7 @@ export default function ProfileScreen({ navigation }) {
 			},
 			emailContainer: {
 				flexDirection: "row",
-				height: "4%",
+				height: "7%",
 				justifyContent: "space-between",
 				alignItems: "center",
 			},
@@ -49,7 +49,7 @@ export default function ProfileScreen({ navigation }) {
 			},
 			fontisto: {
 				alignSelf: "center",
-				height: "15%",
+				marginBottom: 2,
 			},
 		};
 
@@ -73,7 +73,6 @@ export default function ProfileScreen({ navigation }) {
 							style={{
 								...styles.btnTxt,
 								marginLeft: 10,
-								height: "4%",
 							}}
 						>
 							{user.email}

@@ -31,34 +31,31 @@ const LoginScreen = ({ navigation, route }) => {
 		}
 	}, [user.stateUser.state]);
 
-	const verifyEmailAndEnter = useCallback(
-		(email) => {
-			const reg =
-				/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+	const verifyEmailAndEnter = useCallback((email, password) => {
+		const reg =
+			/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
-			if (reg.test(email) === false) {
-				dispatch(setError("Email format is incorrect"));
-				return;
-			} else {
-				if (action == "login") {
-					dispatch(
-						loginUser({
-							email: email,
-							password: password,
-						})
-					);
-				} else if (action == "registrate") {
-					dispatch(
-						registrateUser({
-							email: email,
-							password: password,
-						})
-					);
-				}
+		if (reg.test(email) === false) {
+			dispatch(setError("Email format is incorrect"));
+			return;
+		} else {
+			if (action == "login") {
+				dispatch(
+					loginUser({
+						email: email,
+						password: password,
+					})
+				);
+			} else if (action == "registrate") {
+				dispatch(
+					registrateUser({
+						email: email,
+						password: password,
+					})
+				);
 			}
-		},
-		[dispatch, action, password]
-	);
+		}
+	}, []);
 
 	const getStyles = useCallback((action) => {
 		const styles = {
@@ -134,7 +131,7 @@ const LoginScreen = ({ navigation, route }) => {
 					style={styles.btn}
 					onPress={() => {
 						if (email != "" && password != "") {
-							verifyEmailAndEnter(email);
+							verifyEmailAndEnter(email, password);
 						} else {
 							dispatch(setError("Please fill in both fields"));
 						}

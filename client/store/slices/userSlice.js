@@ -3,6 +3,8 @@ import { StateCode } from "../../enums/EnumState";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { decode } from "base-64";
+global.atob = decode;
 
 const defaultState = {
 	auth: false,
@@ -19,26 +21,52 @@ export const authUser = createAsyncThunk("user/authUser", async (token) => {
 			authorization: `Bearer ${token}`,
 		},
 	});
-	return await resp.data;
+	return resp.data;
 });
 
 export const loginUser = createAsyncThunk("user/loginUser", async (data) => {
-	const resp = await axios.post(`http://192.168.8.158:5000/api/user/login`, {
-		email: data.email,
-		password: data.password,
-	});
-	return await resp.data;
+	try {
+		const resp = await axios.post(
+			`http://192.168.8.158:5000/api/user/login`,
+			{
+				email: data.email,
+				password: data.password,
+			}
+		);
+		return {
+			status: "OK",
+			response: { token: resp.data.token, email: data.email },
+		};
+	} catch (err) {
+		return {
+			status: "ERROR",
+			response: err.response.data.message,
+		};
+	}
 });
 
 export const registrateUser = createAsyncThunk(
 	"user/registrateUser",
 	async (data) => {
-		await axios.post(`http://192.168.8.158:5000/api/user/registration`, {
-			email: data.email,
-			password: data.password,
-			role: "USER",
-		});
-		return await resp.data;
+		try {
+			const resp = await axios.post(
+				`http://192.168.8.158:5000/api/user/registration`,
+				{
+					email: data.email,
+					password: data.password,
+					role: "USER",
+				}
+			);
+			return {
+				status: "OK",
+				response: resp.data.token,
+			};
+		} catch (err) {
+			return {
+				status: "ERROR",
+				response: err.response.data.message,
+			};
+		}
 	}
 );
 
@@ -70,6 +98,7 @@ const userSlice = createSlice({
 				state.stateUser.description = "request successfully completed";
 
 				const decoded = jwtDecode(action.payload.token);
+
 				state.email = decoded.email;
 				state.auth = true;
 				AsyncStorage.setItem("token", action.payload.token);
@@ -88,20 +117,26 @@ const userSlice = createSlice({
 			})
 
 			.addCase(loginUser.fulfilled, (state, action) => {
-				state.stateUser.state = StateCode.OK;
-				state.stateUser.description = "request successfully completed";
+				console.log(action);
+				if (action.payload.status == "OK") {
+					state.stateUser.state = StateCode.OK;
+					state.stateUser.description =
+						"request successfully completed";
 
-				state.email = action.meta.arg.email;
-				state.auth = true;
-				AsyncStorage.setItem("token", action.payload.token);
-			})
-			.addCase(loginUser.rejected, (state, action) => {
-				state.stateUser.state = StateCode.Error;
-				state.stateUser.description = "rejected request to database";
+					state.email = action.payload.response.email;
+					state.auth = true;
+					AsyncStorage.setItem(
+						"token",
+						action.payload.response.token
+					);
+				} else {
+					state.stateUser.state = StateCode.Error;
+					state.stateUser.description = action.payload.response;
 
-				state.email = "";
-				state.auth = false;
-				AsyncStorage.removeItem("token");
+					state.email = "";
+					state.auth = false;
+					AsyncStorage.removeItem("token");
+				}
 			})
 			.addCase(loginUser.pending, (state) => {
 				state.stateUser.state = StateCode.Processing;
@@ -109,21 +144,22 @@ const userSlice = createSlice({
 			})
 
 			.addCase(registrateUser.fulfilled, (state, action) => {
-				state.stateUser.state = StateCode.OK;
-				state.stateUser.description = "request successfully completed";
+				if (action.payload.status == "OK") {
+					state.stateUser.state = StateCode.OK;
+					state.stateUser.description =
+						"request successfully completed";
 
-				state.email = action.meta.arg.email;
-				state.auth = true;
-				AsyncStorage.setItem("token", action.payload.token);
-			})
-			.addCase(registrateUser.rejected, (state, action) => {
-				console.log(action);
-				state.stateUser.state = StateCode.Error;
-				state.stateUser.description = "rejected request to database";
+					state.email = action.meta.arg.email;
+					state.auth = true;
+					AsyncStorage.setItem("token", action.payload.response);
+				} else {
+					state.stateUser.state = StateCode.Error;
+					state.stateUser.description = action.payload.response;
 
-				state.email = "";
-				state.auth = false;
-				AsyncStorage.removeItem("token");
+					state.email = "";
+					state.auth = false;
+					AsyncStorage.removeItem("token");
+				}
 			})
 			.addCase(registrateUser.pending, (state) => {
 				state.stateUser.state = StateCode.Processing;

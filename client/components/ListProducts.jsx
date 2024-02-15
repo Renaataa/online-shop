@@ -23,24 +23,23 @@ const ListProducts = ({ navigation, requestSettings, changePage, imgSize }) => {
 		dispatch(loadProducts(requestSettings));
 	}, [requestSettings]);
 
-	// useCallback ????????????????????????
 	const productsState = useSelector((store) => store.productsReducer);
 
-	// useCallback ????????????????????????
-	async function update() {
+	const update = useCallback(async () => {
 		dispatch(loadProducts(requestSettings));
-	}
+	}, [requestSettings]);
 
 	const getStyles = useCallback(() => {
 		const styles = {
 			erorContainer: {
 				alignItems: "center",
-				margin: 50,
+				marginVertical: 50,
 			},
 			erorTxt: {
+				textAlign: "center",
+				marginBottom: 20,
+				fontSize: 17,
 				color: "dimgray",
-				fontSize: 18,
-				margin: 20,
 			},
 			container: {
 				flexGrow: 1,
@@ -135,13 +134,19 @@ const ListProducts = ({ navigation, requestSettings, changePage, imgSize }) => {
 				</View>
 			);
 		}
-	} else {
+	} else if (productsState.stateProducts.state == StateCode.Error) {
 		return (
 			<View style={styles.erorContainer}>
 				<Text style={styles.erorTxt}>
 					"Opps... something went wrong"
 				</Text>
 				<AntDesign name="frowno" size={30} color="dimgray" />
+			</View>
+		);
+	} else {
+		return (
+			<View style={styles.erorContainer}>
+				<Text style={styles.erorTxt}>Products loading...</Text>
 			</View>
 		);
 	}

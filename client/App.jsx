@@ -108,7 +108,7 @@ const Authorization = (props) => {
 		} else {
 			setCheckAuth(true);
 		}
-	}, [dispatch]);
+	}, []);
 
 	useEffect(() => {
 		authorization();

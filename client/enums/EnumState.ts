@@ -1,4 +1,4 @@
-export enum StateCode { //responseStatus/StatusCode
+export enum StateCode {
 	Idle = 0,
 	OK = 200,
 	Error = 500,
