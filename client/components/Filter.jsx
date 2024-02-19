@@ -77,6 +77,7 @@ const Filter = ({
 					showChips={false}
 					onSelectedItemsChange={setSelected}
 					selectedItems={selected}
+					modalWithTouchable={true}
 				/>
 			</View>
 		);
