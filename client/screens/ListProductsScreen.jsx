@@ -1,11 +1,13 @@
 import { View, Dimensions } from "react-native";
 import { useState, useEffect, useCallback } from "react";
+import { useDispatch } from "react-redux";
 import ListProducts from "../components/ListProducts";
 import FilteredProducts from "../components/FilteredProducts";
+import { setImgSize } from "../store/slices/productsSlice";
 
-export default function ListProductsScreen({ navigation }) {
+export default function ListProductsScreen() {
 	const { width, height } = Dimensions.get("window");
-	const [poductImgSize, setPoductImgSize] = useState(null);
+	const dispatch = useDispatch();
 	const [newLimit, setNewLimit] = useState(null);
 	const [requestSettings, setRequestSettings] = useState({
 		page: 1,
@@ -28,22 +30,19 @@ export default function ListProductsScreen({ navigation }) {
 				calculatedPoductImgSize = 118;
 			}
 
-			const calculatedNewLimit = Math.floor(
-				height / calculatedPoductImgSize - 2
-			);
+			const calculatedNewLimit = Math.floor(height / calculatedPoductImgSize - 2);
 
-			setPoductImgSize(calculatedPoductImgSize);
+			dispatch(setImgSize(calculatedPoductImgSize));
 			setNewLimit(calculatedNewLimit);
 		};
 
-		if (!poductImgSize || !newLimit) {
+		if (!newLimit) {
 			calculateSizes();
 		}
 	}, [width, height]);
 
 	useEffect(() => {
-		if (newLimit != null)
-			setRequestSettings({ ...requestSettings, limit: newLimit });
+		if (newLimit != null) setRequestSettings({ ...requestSettings, limit: newLimit });
 	}, [newLimit]);
 
 	const filterFunc = useCallback(
@@ -71,18 +70,13 @@ export default function ListProductsScreen({ navigation }) {
 		[requestSettings]
 	);
 
-	if (poductImgSize === null || newLimit === null) {
+	if (newLimit === null) {
 		return <View />;
 	} else {
 		return (
 			<View>
 				<FilteredProducts filterFunc={filterFunc} />
-				<ListProducts
-					navigation={navigation}
-					requestSettings={requestSettings}
-					changePage={changePage}
-					imgSize={poductImgSize}
-				/>
+				<ListProducts requestSettings={requestSettings} changePage={changePage} />
 			</View>
 		);
 	}

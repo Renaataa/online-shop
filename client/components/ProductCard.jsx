@@ -1,8 +1,12 @@
 import { View, Text, Image, Pressable, StyleSheet } from "react-native";
 import { useCallback } from "react";
+import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
-const ProductCard = ({ product, navigation, imgSize }) => {
+const ProductCard = ({ product }) => {
 	const imgPath = "http://192.168.8.158:5000/" + product.img;
+	const imgSize = useSelector((store) => store.productsReducer.imgSize);
+	const navigation = useNavigation();
 
 	const getStyles = useCallback((imgSize) => {
 		const styles = {
