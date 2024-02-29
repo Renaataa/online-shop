@@ -4,6 +4,7 @@ import { StateCode } from "../../enums/EnumState";
 const defaultState = {
 	products: [],
 	countProducts: 0,
+	imgSize: 140,
 	stateProducts: {
 		state: StateCode.Idle,
 		description: "initial state",
@@ -23,20 +24,22 @@ export const loadProducts = createAsyncThunk(
 const productsSlice = createSlice({
 	name: "products",
 	initialState: defaultState,
-	reducers: {},
+	reducers: {
+		setImgSize: (state, action) => {
+			state.imgSize = action.payload;
+		},
+	},
 	extraReducers: (build) => {
 		build
 			.addCase(loadProducts.fulfilled, (state, action) => {
 				state.products = action.payload.rows;
 				state.countProducts = action.payload.count;
 				state.stateProducts.state = StateCode.OK;
-				state.stateProducts.description =
-					"request successfully completed";
+				state.stateProducts.description = "request successfully completed";
 			})
 			.addCase(loadProducts.rejected, (state) => {
 				state.stateProducts.state = StateCode.Error;
-				state.stateProducts.description =
-					"rejected request to database";
+				state.stateProducts.description = "rejected request to database";
 			})
 			.addCase(loadProducts.pending, (state) => {
 				state.stateProducts.state = StateCode.Processing;
@@ -45,5 +48,5 @@ const productsSlice = createSlice({
 	},
 });
 
-export const {} = productsSlice.actions;
+export const { setImgSize } = productsSlice.actions;
 export const productsReducer = productsSlice.reducer;

@@ -1,20 +1,20 @@
 import { View, Image, Text, Pressable, StyleSheet, Alert } from "react-native";
 import { useEffect, useState, useCallback } from "react";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import { loadProduct } from "../store/slices/productSlice";
-
 import ModalAddToCart from "./ModalAddToCart";
 import ModalAskEmail from "./ModalAskEmail";
 import ListProductInfo from "./ListProductInfo";
 import { StateCode } from "../enums/EnumState";
-
 import { AntDesign } from "@expo/vector-icons";
 
 function ProductItem({ productId }) {
 	const dispatch = useDispatch();
 	const [showCartModal, setShowCartModal] = useState(false);
 	const [showEmailModal, setShowEmailModal] = useState(false);
+	const [cartProducts, setCartProducts] = useState([]);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		dispatch(loadProduct(productId));
@@ -60,10 +60,53 @@ function ProductItem({ productId }) {
 	);
 
 	const alert = useCallback((message) => {
-		Alert.alert("Your purchase", message, [
-			{ text: "OK", onPress: () => {} },
-		]);
+		Alert.alert("Your purchase", message, [{ text: "OK", onPress: () => {} }]);
 	}, []);
+
+	const getCartProducts = useCallback(async () => {
+		//AsyncStorage.removeItem("cartProducts");
+		try {
+			const cartProductsJson = await AsyncStorage.getItem("cartProducts");
+			if (cartProductsJson !== null) {
+				setCartProducts(JSON.parse(cartProductsJson));
+			}
+		} catch (error) {
+			console.log(error, "do not receive data from AsyncStorage");
+		} finally {
+			setLoading(false);
+		}
+	}, []);
+
+	useEffect(() => {
+		getCartProducts();
+	}, []);
+
+	const addToCart = (cartProducts, setCartProducts, productState) => {
+		if (cartProducts != []) {
+			const indexSameProduct = cartProducts.findIndex(
+				(product) => product.product.id == productState.product.id
+			);
+
+			if (indexSameProduct > -1) {
+				const cartProductsCopy = [...cartProducts];
+				cartProductsCopy[indexSameProduct].count++;
+				setCartProducts(cartProductsCopy);
+			} else {
+				setCartProducts([
+					...cartProducts,
+					{ count: 1, product: productState.product },
+				]);
+			}
+		} else {
+			setCartProducts([{ count: 1, product: productState.product }]);
+		}
+	};
+
+	//вхожу сюда при открытии каждого продукта а не только при изменении cartProducts
+	useEffect(() => {
+		const cartProductsJson = JSON.stringify(cartProducts);
+		AsyncStorage.setItem("cartProducts", cartProductsJson);
+	}, [cartProducts]);
 
 	const getStyles = useCallback(() => {
 		const styles = {
@@ -127,7 +170,8 @@ function ProductItem({ productId }) {
 
 	if (
 		productState.stateProduct.state == StateCode.OK &&
-		Object.keys(productState.product).length != 0
+		Object.keys(productState.product).length != 0 &&
+		!loading
 	) {
 		return (
 			<Pressable onPress={() => setShowCartModal(false)}>
@@ -146,9 +190,7 @@ function ProductItem({ productId }) {
 								{productState.product.name}
 							</Text>
 							{productState.product.info ? (
-								<ListProductInfo
-									info={productState.product.info}
-								/>
+								<ListProductInfo info={productState.product.info} />
 							) : (
 								<Text></Text>
 							)}
@@ -160,7 +202,11 @@ function ProductItem({ productId }) {
 
 					<Pressable
 						style={{ ...styles.btn, backgroundColor: "#F7E18A" }}
-						onPress={() => setShowCartModal(true)}
+						onPress={() => {
+							addToCart(cartProducts, setCartProducts, productState);
+
+							setShowCartModal(true);
+						}}
 					>
 						<Text style={styles.btnTxt}>Add to cart</Text>
 					</Pressable>
@@ -187,9 +233,7 @@ function ProductItem({ productId }) {
 	) {
 		return (
 			<View style={styles.erorContainer}>
-				<Text style={styles.erorTxt}>
-					"Opps... something went wrong"
-				</Text>
+				<Text style={styles.erorTxt}>"Opps... something went wrong"</Text>
 				<AntDesign name="frowno" size={30} color="dimgray" />
 			</View>
 		);

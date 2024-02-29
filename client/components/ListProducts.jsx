@@ -15,7 +15,7 @@ import ProductCard from "../components/ProductCard";
 import { StateCode } from "../enums/EnumState";
 import { AntDesign } from "@expo/vector-icons";
 
-const ListProducts = ({ navigation, requestSettings, changePage, imgSize }) => {
+const ListProducts = ({ requestSettings, changePage }) => {
 	const dispatch = useDispatch();
 	const { width, height } = Dimensions.get("window");
 
@@ -76,9 +76,7 @@ const ListProducts = ({ navigation, requestSettings, changePage, imgSize }) => {
 								switch (value) {
 									case "left":
 										if (requestSettings.page > 1)
-											changePage(
-												requestSettings.page - 1
-											);
+											changePage(requestSettings.page - 1);
 										break;
 									case "right":
 										if (
@@ -86,9 +84,7 @@ const ListProducts = ({ navigation, requestSettings, changePage, imgSize }) => {
 											productsState.countProducts /
 												requestSettings.limit
 										)
-											changePage(
-												requestSettings.page + 1
-											);
+											changePage(requestSettings.page + 1);
 										break;
 								}
 							}}
@@ -107,14 +103,7 @@ const ListProducts = ({ navigation, requestSettings, changePage, imgSize }) => {
 								data={productsState.products}
 								keyExtractor={(item) => item.id}
 								renderItem={({ item }) => {
-									return (
-										<ProductCard
-											key={item.id}
-											product={item}
-											navigation={navigation}
-											imgSize={imgSize}
-										/>
-									);
+									return <ProductCard key={item.id} product={item} />;
 								}}
 							/>
 							<Text style={styles.pagination}>
@@ -137,9 +126,7 @@ const ListProducts = ({ navigation, requestSettings, changePage, imgSize }) => {
 	} else if (productsState.stateProducts.state == StateCode.Error) {
 		return (
 			<View style={styles.erorContainer}>
-				<Text style={styles.erorTxt}>
-					"Opps... something went wrong"
-				</Text>
+				<Text style={styles.erorTxt}>"Opps... something went wrong"</Text>
 				<AntDesign name="frowno" size={30} color="dimgray" />
 			</View>
 		);

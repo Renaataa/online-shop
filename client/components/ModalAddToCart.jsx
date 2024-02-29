@@ -1,7 +1,10 @@
 import { View, StyleSheet, Image, Text, Pressable, Modal } from "react-native";
 import { useCallback } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 const ModalAddToCart = ({ active, product, changeShowModal }) => {
+	const navigation = useNavigation();
+
 	const getStyles = useCallback(() => {
 		const styles = {
 			modalBackground: {
@@ -65,7 +68,6 @@ const ModalAddToCart = ({ active, product, changeShowModal }) => {
 
 		return StyleSheet.create(styles);
 	}, []);
-
 	const styles = getStyles();
 
 	if (active) {
@@ -91,9 +93,7 @@ const ModalAddToCart = ({ active, product, changeShowModal }) => {
 							/>
 
 							<View style={styles.productInfoContainer}>
-								<Text style={styles.txtProductName}>
-									{product.name}
-								</Text>
+								<Text style={styles.txtProductName}>{product.name}</Text>
 								<Text style={styles.txtProductPrice}>
 									{product.price} zl
 								</Text>
@@ -106,13 +106,18 @@ const ModalAddToCart = ({ active, product, changeShowModal }) => {
 									...styles.btnModal,
 									backgroundColor: "#F7E18A",
 								}}
-								onPress={() => changeShowModal(false)}
+								onPress={() => {
+									changeShowModal(false);
+								}}
 							>
 								<Text style={styles.btnTxt}>Keep shopping</Text>
 							</Pressable>
 							<Pressable
 								style={styles.btnModal}
-								onPress={() => changeShowModal(false)}
+								onPress={() => {
+									changeShowModal(false);
+									navigation.navigate("Cart");
+								}}
 							>
 								<Text style={styles.btnTxt}>Go to cart</Text>
 							</Pressable>
